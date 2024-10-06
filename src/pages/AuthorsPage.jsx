@@ -1,5 +1,7 @@
+import Authors from "../components/Authors/Authors";
+
 function AuthorsPage() {
-  return <div>Authors</div>;
+  return <Authors />;
 }
 
 export default AuthorsPage;

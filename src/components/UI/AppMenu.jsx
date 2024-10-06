@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from "react";
 import { Avatar, Menu } from "antd";
+import React, { useEffect, useState } from "react";
+import { FaSignOutAlt, FaUser } from "react-icons/fa";
 import {
   HiOutlineBookOpen,
-  HiOutlineCalendar,
   HiOutlineHome,
+  HiOutlineOfficeBuilding,
+  HiOutlineTag,
   HiOutlineUser,
+  HiOutlineUserGroup,
+  HiOutlineUsers,
 } from "react-icons/hi";
 import { useLocation, useNavigate } from "react-router-dom";
-import { FaSignOutAlt, FaUser } from "react-icons/fa";
 
 export function SidderMenu() {
   const navigate = useNavigate();
@@ -29,18 +32,33 @@ export function SidderMenu() {
         {
           label: "Users",
           key: "/users",
-          icon: <HiOutlineCalendar />,
+          icon: <HiOutlineUserGroup />,
         },
 
         {
           label: "Patrons",
           key: "/patrons",
-          icon: <HiOutlineBookOpen />,
+          icon: <HiOutlineUser />,
         },
         {
           label: "Books",
           key: "/books",
-          icon: <HiOutlineUser />,
+          icon: <HiOutlineBookOpen />,
+        },
+        {
+          label: "Categories",
+          key: "/categories",
+          icon: <HiOutlineTag />,
+        },
+        {
+          label: "Authors",
+          key: "/authors",
+          icon: <HiOutlineUsers />,
+        },
+        {
+          label: "Publishers",
+          key: "/publishers",
+          icon: <HiOutlineOfficeBuilding />,
         },
       ]}
       theme={"dark"}

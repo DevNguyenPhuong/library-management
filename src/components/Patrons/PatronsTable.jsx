@@ -7,9 +7,9 @@ import { prepareTableData } from "./tableUtils";
 import { useNavigate } from "react-router-dom";
 
 function PatronsTable() {
+  const searchInput = useRef(null);
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
-  const searchInput = useRef(null);
   const navigate = useNavigate();
 
   const handleEdit = (id) => {
@@ -45,7 +45,6 @@ function PatronsTable() {
         pageSize: PATRON_PAGE_SIZE,
         showQuickJumper: true,
       }}
-      style={{ height: 500 }}
     />
   );
 }

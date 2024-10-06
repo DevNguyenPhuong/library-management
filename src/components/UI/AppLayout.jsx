@@ -26,7 +26,7 @@ function AppLayout() {
       </Sider>
 
       <Layout className={`${layoutConfig[collapsed]}`}>
-        <Header className="fixed   w-full top-0 left-0 z-10 flex items-center font-bold ">
+        <Header className="fixed w-full top-0 left-0 z-10 flex items-center font-bold ">
           <HeaderMenu />
         </Header>
 

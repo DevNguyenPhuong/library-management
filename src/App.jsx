@@ -13,6 +13,9 @@ import PatronsPage from "./pages/PatronsPage.jsx";
 import RolesPage from "./pages/RolesPage.jsx";
 import UsersPage from "./pages/UsersPage.jsx";
 import PatronPage from "./pages/PatronPage.jsx";
+import CategoriesPage from "./pages/CategoriesPage.jsx";
+import PublishersPage from "./pages/PublishersPage.jsx";
+import ProtectedRoute from "./components/UI/ProtectedRoute.jsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -29,13 +32,21 @@ function App() {
       <ConfigProvider>
         <BrowserRouter>
           <Routes>
-            <Route element={<AppLayout />}>
+            <Route
+              element={
+                <ProtectedRoute>
+                  <AppLayout />
+                </ProtectedRoute>
+              }
+            >
               <Route index element={<Navigate replace to="dashboard" />} />
               <Route path="dashboard" element={<DashboardPage />} />
               <Route path="patrons" element={<PatronsPage />} />
               <Route path="patrons/:patronID" element={<PatronPage />} />
               <Route path="books" element={<BooksPage />} />
               <Route path="authors" element={<AuthorsPage />} />
+              <Route path="categories" element={<CategoriesPage />} />
+              <Route path="publishers" element={<PublishersPage />} />
               <Route path="roles" element={<RolesPage />} />
               <Route path="users" element={<UsersPage />} />
             </Route>
