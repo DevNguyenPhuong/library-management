@@ -15,6 +15,7 @@ export function useLogin() {
     mutationFn: (user) => loginAPI(user),
     onSuccess: (response, payload) => {
       localStorage.setItem("token", response?.result?.token);
+      localStorage.setItem("authenticated", response?.result?.authenticated);
       dispatch(setUser({ ...response?.result }));
       navigate("/dashboard");
     },

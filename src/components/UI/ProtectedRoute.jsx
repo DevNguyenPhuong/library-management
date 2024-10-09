@@ -5,7 +5,8 @@ import { useNavigate } from "react-router-dom";
 function ProtectedRoute({ children }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { authenticated } = useSelector((store) => store.user);
+  // const { authenticated } = useSelector((store) => store.user);
+  const authenticated = localStorage.getItem("authenticated");
 
   useEffect(
     function () {
