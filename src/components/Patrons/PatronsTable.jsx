@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import { FakePatronData } from "../../data/fakeData";
 import { PATRON_PAGE_SIZE } from "../../utils/constants";
 import { getPatronColumns } from "./patronColumns";
-import { prepareTableData } from "./tableUtils";
+import { prepareTableData } from "../Table/tableUtils";
 import { useNavigate } from "react-router-dom";
 
 function PatronsTable() {

@@ -1,6 +1,6 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Button, Space, Tooltip } from "antd";
-import { getColumnSearchProps } from "./searchUtils";
+import { getColumnSearchProps } from "../Table/searchUtils";
 
 export const getPatronColumns = (
   searchInput,

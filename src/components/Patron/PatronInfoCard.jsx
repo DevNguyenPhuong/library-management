@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import {
   Avatar,
   Button,
@@ -19,6 +20,7 @@ import {
   BookOutlined,
   UserOutlined,
 } from "@ant-design/icons";
+
 import moment from "moment";
 
 const { Title } = Typography;
@@ -130,6 +132,8 @@ const PatronInfoCard = ({ patron, calculateAge, onUpdatePatron }) => {
         </Descriptions>
       </Card>
 
+
+
       <Modal
         title="Edit Patron Information"
         open={isModalVisible}
@@ -164,6 +168,7 @@ const PatronInfoCard = ({ patron, calculateAge, onUpdatePatron }) => {
           </Form.Item>
         </Form>
       </Modal>
+
     </>
   );
 };

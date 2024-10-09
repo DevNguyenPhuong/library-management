@@ -12,7 +12,7 @@ import {
 } from "react-icons/hi";
 import { useLocation, useNavigate } from "react-router-dom";
 
-export function SidderMenu() {
+export function SiderMenu() {
   const navigate = useNavigate();
   const [selectedKey, setSelectedKey] = useState("/dashboard");
   const location = useLocation();

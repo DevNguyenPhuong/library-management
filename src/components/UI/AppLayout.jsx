@@ -1,7 +1,7 @@
 import { Layout } from "antd";
 import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
-import { HeaderMenu, SidderMenu } from "./AppMenu";
+import { HeaderMenu, SiderMenu } from "./AppMenu";
 const { Header, Content, Sider } = Layout;
 
 function AppLayout() {
@@ -22,7 +22,7 @@ function AppLayout() {
         onCollapse={(value) => setCollapsed(value)}
       >
         <div className=" h-16 flex items-center justify-center font-bold text-slate-300"></div>
-        <SidderMenu />
+        <SiderMenu />
       </Sider>
 
       <Layout className={`${layoutConfig[collapsed]}`}>

@@ -16,6 +16,7 @@ import PatronPage from "./pages/PatronPage.jsx";
 import CategoriesPage from "./pages/CategoriesPage.jsx";
 import PublishersPage from "./pages/PublishersPage.jsx";
 import ProtectedRoute from "./components/UI/ProtectedRoute.jsx";
+import AddCategories from "./components/Categories/AddCategories.jsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -49,6 +50,7 @@ function App() {
               <Route path="publishers" element={<PublishersPage />} />
               <Route path="roles" element={<RolesPage />} />
               <Route path="users" element={<UsersPage />} />
+              <Route path="addCategories" element={<AddCategories />} />
             </Route>
 
             <Route path="login" element={<LoginPage />} />
