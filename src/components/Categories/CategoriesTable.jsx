@@ -1,104 +1,68 @@
-import { Table } from "antd";
-import { useRef, useState } from "react";
-import { PATRON_PAGE_SIZE } from "../../utils/constants";
-import categoriesCols from "./categoriesCols";
-import { prepareCategoriesTableData } from "../Table/tableUtils";
-import { useNavigate } from "react-router-dom";
+import { LoadingOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
-import { getAllData } from "../../services/apiBooks";
-import { LoadingOutlined } from '@ant-design/icons';
-import { toast } from "react-hot-toast";
-import { Flex, Spin } from 'antd';
+import { Result, Spin, Table } from "antd";
+import { useNavigate } from "react-router-dom";
+import { getAllData } from "../../services/apiLibrary";
+import { PATRON_PAGE_SIZE } from "../../utils/constants";
+import { prepareCategoriesTableData } from "../Table/tableUtils";
+import categoriesCols from "./categoriesCols";
 
 const CategoriesTable = () => {
-    const {
-        data: samples,
-        isLoading,
-        error,
-      } = useQuery({
-        queryFn: () => getAllData()  ,
-        queryKey: ["samples"],
-      });
+  const {
+    data: samples,
+    isLoading,
+    error,
+  } = useQuery({
+    queryFn: () => getAllData(),
+    queryKey: ["samples"],
+  });
 
-    // const handleError = () => {
-    //     const { response } = error;
-    //     toast.error(response?.data.message || "Opps, cannot perform this action");
-    // }
-    const searchInput = useRef(null);
-    const [searchText, setSearchText] = useState("");
-    const [searchedColumn, setSearchedColumn] = useState("");
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    if (isLoading) {
-        return <>
-            <Flex className='flex justify-center' >
-                <Spin className='' indicator={<LoadingOutlined style={{ fontSize: 100 }} spin />} />
-            </Flex >
-        </>
-    }
-    console.log(samples)
-
-    const handleEdit = (id) => {
-        navigate(`/category/${id}`);
-    };
-
-    const handleDelete = (id) => {
-        console.log(`Deleting patron with id: ${id} `);
-    };
-
-    const columns = categoriesCols(
-        searchInput,
-        searchText,
-        setSearchText,
-        searchedColumn,
-        setSearchedColumn,
-        handleEdit,
-        handleDelete
-    );
-    // const emptyRowsCount = Math.max(
-    //     0,
-    //     PATRON_PAGE_SIZE - (categories.length % PATRON_PAGE_SIZE)
-    // );
-    // const dataWithEmptyRows = prepareCategoriesTableData(categories, emptyRowsCount);
+  if (isLoading) {
     return (
-
-        <>
-            {
-                console.log(samples)
-            }
-        
-        {
-        }
-
-            {/* {
-                isLoading ? (
-                    <Flex className='flex justify-center' >
-                        <Spin className='' indicator={<LoadingOutlined style={{ fontSize: 100 }} spin />} />
-                    </Flex >
-                ) : (
-
-                    error ? (handleError()) : (
-                        <Table
-                            columns={columns}
-                            dataSource={dataWithEmptyRows}
-                            pagination={{
-                                pageSize: PATRON_PAGE_SIZE,
-                                showQuickJumper: true,
-                            }}
-                        />
-                    )
-
-
-                )
-            } */}
-
-
-
-        </>
-        // <>
-
-        // </>
+      <div className="flex justify-center items-center h-screen">
+        <Spin indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
+      </div>
     );
-}
+  }
 
-export default CategoriesTable
+  if (error) {
+    return (
+      <Result
+        status="error"
+        title="Error"
+        subTitle="Sorry, there was an error loading the sample data."
+      />
+    );
+  }
+
+  const handleEdit = (id) => {
+    navigate(`/category/${id}`);
+  };
+
+  const handleDelete = (id) => {
+    console.log(`Deleting patron with id: ${id} `);
+  };
+
+  const columns = categoriesCols(handleEdit, handleDelete);
+  const emptyRowsCount = Math.max(
+    0,
+    PATRON_PAGE_SIZE - (samples?.length % PATRON_PAGE_SIZE)
+  );
+
+  const dataWithEmptyRows = prepareCategoriesTableData(samples, emptyRowsCount);
+  return (
+    <Table
+      columns={columns}
+      dataSource={samples?.length === 0 ? [] : dataWithEmptyRows}
+      pagination={{
+        pageSize: PATRON_PAGE_SIZE,
+        showQuickJumper: true,
+      }}
+      bordered
+    />
+  );
+};
+
+export default CategoriesTable;

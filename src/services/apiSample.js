@@ -1,7 +1,7 @@
 import axios from "../axios";
 
 export async function getAllSamples() {
-  const { data, error } = axios.get(`/samples`);
+  const { data, error } = await axios.get(`/samples`);
   if (error) throw new Error(error.messsage);
   return data;
 }
