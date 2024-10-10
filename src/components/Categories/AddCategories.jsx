@@ -7,8 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { createData } from "../../services/apiLibrary";
 
 const AddCategories = () => {
+  const { TextArea } = Input;
   const navigate = useNavigate();
-
   const queryClient = useQueryClient();
   const { mutate, isPending } = useMutation({
     mutationFn: (category) => createData(`/categories`, category),
@@ -79,7 +79,7 @@ const AddCategories = () => {
             },
           ]}
         >
-          <Input disabled={isPending} />
+          <TextArea disabled={isPending} rows={4} />
         </Form.Item>
 
         <Form.Item

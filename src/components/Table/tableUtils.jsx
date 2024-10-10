@@ -46,7 +46,7 @@ export const createEmptyRowsLoan = (count, startIndex) => {
 export const prepareLoanTableData = (data, emptyRowsCount) => {
   const dataWithKeys = data.map((item, index) => ({
     ...item,
-    key: item.id || `patron-${index}`,
+    key: item.id || `categories-${index}`,
   }));
 
   return [
@@ -76,6 +76,54 @@ export const prepareCategoriesTableData = (data, emptyRowsCount) => {
   return [
     ...dataWithKeys,
     ...createEmptyRowsCategories(emptyRowsCount, dataWithKeys.length),
+  ];
+};
+
+export const createEmptyRowsAuthors = (count, startIndex) => {
+  return Array(count)
+    .fill()
+    .map((_, index) => ({
+      key: `empty-${startIndex + index}`,
+      id: "",
+      name: "",
+      biography: "",
+      isEmpty: true,
+    }));
+};
+
+export const prepareAuthorsTableData = (data, emptyRowsCount) => {
+  const dataWithKeys = data.map((item, index) => ({
+    ...item,
+    key: item.id || `authors-${index}`,
+  }));
+
+  return [
+    ...dataWithKeys,
+    ...createEmptyRowsAuthors(emptyRowsCount, dataWithKeys.length),
+  ];
+};
+
+export const createEmptyRowsPublishers = (count, startIndex) => {
+  return Array(count)
+    .fill()
+    .map((_, index) => ({
+      key: `empty-${startIndex + index}`,
+      id: "",
+      name: "",
+      address: "",
+      isEmpty: true,
+    }));
+};
+
+export const preparePublishersTableData = (data, emptyRowsCount) => {
+  const dataWithKeys = data.map((item, index) => ({
+    ...item,
+    key: item.id || `authors-${index}`,
+  }));
+
+  return [
+    ...dataWithKeys,
+    ...createEmptyRowsPublishers(emptyRowsCount, dataWithKeys.length),
   ];
 };
 

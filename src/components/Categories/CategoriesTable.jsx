@@ -1,11 +1,13 @@
-import { LoadingOutlined } from "@ant-design/icons";
-import { useQuery } from "@tanstack/react-query";
+import { LoadingOutlined  } from "@ant-design/icons";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { Result, Spin, Table } from "antd";
 import { useNavigate } from "react-router-dom";
-import { getAllData } from "../../services/apiLibrary";
+import { getAllData,deleteData } from "../../services/apiLibrary";
 import { PATRON_PAGE_SIZE } from "../../utils/constants";
 import { prepareCategoriesTableData } from "../Table/tableUtils";
 import categoriesCols from "./categoriesCols";
+import { toast } from "react-hot-toast";
+
 
 const CategoriesTable = () => {
   const {
@@ -13,11 +15,28 @@ const CategoriesTable = () => {
     isLoading,
     error,
   } = useQuery({
-    queryFn: () => getAllData(),
-    queryKey: ["samples"],
+    queryFn: () => getAllData(`/categories`),
+    queryKey: ["categories"],
+    select: data => data.sort((a, b) => a.name.localeCompare(b.name))
   });
 
   const navigate = useNavigate();
+
+  const queryClient = useQueryClient();
+  const { mutate: deleteCategory} = useMutation({
+    mutationFn: (id) => deleteData(`/categories/${id}`),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [`categories`],
+      });
+    },
+
+    onError: (error) => {
+      const { response } = error;
+      toast.error(response?.data.message || "Opps, cannot perform this action");
+    },
+  });
 
   if (isLoading) {
     return (
@@ -38,11 +57,12 @@ const CategoriesTable = () => {
   }
 
   const handleEdit = (id) => {
-    navigate(`/category/${id}`);
+    navigate(`/categories/${id}`);
   };
 
   const handleDelete = (id) => {
-    console.log(`Deleting patron with id: ${id} `);
+
+    deleteCategory(id);
   };
 
   const columns = categoriesCols(handleEdit, handleDelete);

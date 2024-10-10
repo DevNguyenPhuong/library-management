@@ -1,8 +1,8 @@
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Button, Space, Tooltip } from "antd";
+import { DeleteOutlined, EditOutlined, QuestionCircleOutlined } from "@ant-design/icons";
+import { Button, Space, Tooltip, Popconfirm } from "antd";
 import React from "react";
 
-const categoriesCols = (handleDetail, handleDelete) => {
+const categoriesCols = (handleEdit, handleDelete) => {
   return [
     {
       title: "Name",
@@ -27,17 +27,35 @@ const categoriesCols = (handleDetail, handleDelete) => {
                 <Button
                   type="primary"
                   icon={<EditOutlined />}
-                  onClick={() => handleDetail(record.key)}
+                  onClick={() => handleEdit(record.key)}
                 />
               </Tooltip>
-              <Tooltip title="Delete">
+              {/* <Tooltip title="Delete">
                 <Button
                   type="primary"
                   danger
                   icon={<DeleteOutlined />}
                   onClick={() => handleDelete(record.key)}
                 />
-              </Tooltip>
+              </Tooltip> */}
+              <Popconfirm
+                title="Delete the task"
+                description="Are you sure to delete this task?"
+                icon={
+                  <QuestionCircleOutlined
+                    style={{
+                      color: 'red',
+                    }}
+                  />
+                }
+                onConfirm={()=>handleDelete(record.key)}
+              >
+                <Button
+                  danger
+                  icon={<DeleteOutlined />}
+                  // onClick={() => handleDelete(record.key)}
+                ></Button>
+              </Popconfirm>
             </Space>
           )}
         </div>

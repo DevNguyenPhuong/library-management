@@ -17,6 +17,11 @@ import CategoriesPage from "./pages/CategoriesPage.jsx";
 import PublishersPage from "./pages/PublishersPage.jsx";
 import ProtectedRoute from "./components/UI/ProtectedRoute.jsx";
 import AddCategories from "./components/Categories/AddCategories.jsx";
+import EditCategory from "./components/Categories/EditCategory.jsx";
+import AddAthors from "./components/Authors/AddAthors.jsx";
+import EditAuthor from "./components/Authors/EditAuthor.jsx";
+import AddPublisher from "./components/Publishers/AddPublisher.jsx";
+import EditPublisher from "./components/Publishers/EditPublisher.jsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -51,6 +56,11 @@ function App() {
               <Route path="roles" element={<RolesPage />} />
               <Route path="users" element={<UsersPage />} />
               <Route path="addCategories" element={<AddCategories />} />
+              <Route path="categories/:categoryID" element={<EditCategory />} />
+              <Route path="addAuthor" element={<AddAthors />} />
+              <Route path="authors/:authorID" element={<EditAuthor />} />
+              <Route path="addPublisher" element={<AddPublisher />} />
+              <Route path="publishers/:publisherID" element={<EditPublisher />} />
             </Route>
 
             <Route path="login" element={<LoginPage />} />
