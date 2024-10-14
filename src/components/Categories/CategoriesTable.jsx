@@ -1,13 +1,12 @@
-import { LoadingOutlined  } from "@ant-design/icons";
+import { LoadingOutlined } from "@ant-design/icons";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { Result, Spin, Table } from "antd";
 import { useNavigate } from "react-router-dom";
-import { getAllData,deleteData } from "../../services/apiLibrary";
+import { getAllData, deleteData } from "../../services/apiLibrary";
 import { PATRON_PAGE_SIZE } from "../../utils/constants";
 import { prepareCategoriesTableData } from "../Table/tableUtils";
 import categoriesCols from "./categoriesCols";
 import { toast } from "react-hot-toast";
-
 
 const CategoriesTable = () => {
   const {
@@ -17,13 +16,13 @@ const CategoriesTable = () => {
   } = useQuery({
     queryFn: () => getAllData(`/categories`),
     queryKey: ["categories"],
-    select: data => data.sort((a, b) => a.name.localeCompare(b.name))
+    select: (data) => data.sort((a, b) => a.name.localeCompare(b.name)),
   });
 
   const navigate = useNavigate();
 
   const queryClient = useQueryClient();
-  const { mutate: deleteCategory} = useMutation({
+  const { mutate: deleteCategory } = useMutation({
     mutationFn: (id) => deleteData(`/categories/${id}`),
 
     onSuccess: () => {
@@ -61,7 +60,6 @@ const CategoriesTable = () => {
   };
 
   const handleDelete = (id) => {
-
     deleteCategory(id);
   };
 
@@ -74,6 +72,7 @@ const CategoriesTable = () => {
   const dataWithEmptyRows = prepareCategoriesTableData(samples, emptyRowsCount);
   return (
     <Table
+      className="shadow-lg rounded-lg"
       columns={columns}
       dataSource={samples?.length === 0 ? [] : dataWithEmptyRows}
       pagination={{

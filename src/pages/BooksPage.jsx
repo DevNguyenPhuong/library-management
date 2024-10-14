@@ -1,9 +1,7 @@
+import Books from "../components/Books/Books";
+
 function BooksPage() {
-  return (
-    <>
-      <div>Books page</div>
-    </>
-  );
+  return <Books></Books>;
 }
 
 export default BooksPage;

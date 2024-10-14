@@ -132,8 +132,6 @@ const PatronInfoCard = ({ patron, calculateAge, onUpdatePatron }) => {
         </Descriptions>
       </Card>
 
-
-
       <Modal
         title="Edit Patron Information"
         open={isModalVisible}
@@ -168,7 +166,6 @@ const PatronInfoCard = ({ patron, calculateAge, onUpdatePatron }) => {
           </Form.Item>
         </Form>
       </Modal>
-
     </>
   );
 };

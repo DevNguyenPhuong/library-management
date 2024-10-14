@@ -1,4 +1,8 @@
-import { DeleteOutlined, EditOutlined, QuestionCircleOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  QuestionCircleOutlined,
+} from "@ant-design/icons";
 import { Button, Space, Tooltip, Popconfirm } from "antd";
 import React from "react";
 
@@ -44,11 +48,11 @@ const categoriesCols = (handleEdit, handleDelete) => {
                 icon={
                   <QuestionCircleOutlined
                     style={{
-                      color: 'red',
+                      color: "red",
                     }}
                   />
                 }
-                onConfirm={()=>handleDelete(record.key)}
+                onConfirm={() => handleDelete(record.key)}
               >
                 <Button
                   danger
