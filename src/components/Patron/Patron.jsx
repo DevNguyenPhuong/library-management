@@ -11,7 +11,6 @@ import LoansTable from "../Patrons/LoansTable"
 
 const Patron = () => {
   const [patron, setPatron] = useState(initialPatron);
-
   const calculateAge = (dob) => {
     return moment().diff(moment(dob), "years");
   };

@@ -61,7 +61,6 @@ const CategoriesTable = () => {
   };
 
   const handleDelete = (id) => {
-
     deleteCategory(id);
   };
 
