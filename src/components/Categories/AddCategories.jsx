@@ -32,12 +32,17 @@ const AddCategories = () => {
 
   return (
     <>
-      <Button shape="rounded" onClick={() => navigate(`/categories`)}>
-        <IoMdArrowBack />
+      <Button
+        icon={<IoMdArrowBack />}
+        shape="rounded"
+        type="primary"
+        onClick={() => navigate(`/categories`)}
+      >
+        Back
       </Button>
 
-      <h1 className="text-3xl font-bold mb-11 flex justify-center">
-        Add New Category
+      <h1 className="text-indigo-600 mt-12 text-3xl font-bold mb-11 flex justify-center">
+        New Category
       </h1>
       <Form
         name="add"
@@ -66,7 +71,7 @@ const AddCategories = () => {
             },
           ]}
         >
-          <Input disabled={isPending} />
+          <Input placeholder="category" disabled={isPending} />
         </Form.Item>
 
         <Form.Item
@@ -79,7 +84,13 @@ const AddCategories = () => {
             },
           ]}
         >
-          <TextArea disabled={isPending} rows={4} />
+          <TextArea
+            placeholder="Tell somethings about this category"
+            showCount
+            maxLength={200}
+            disabled={isPending}
+            rows={4}
+          />
         </Form.Item>
 
         <Form.Item
@@ -88,7 +99,12 @@ const AddCategories = () => {
             span: 16,
           }}
         >
-          <Button loading={isPending} type="primary" htmlType="submit">
+          <Button
+            className="mt-5"
+            loading={isPending}
+            type="primary"
+            htmlType="submit"
+          >
             Submit
           </Button>
         </Form.Item>

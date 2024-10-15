@@ -11,7 +11,7 @@ export async function createData(url, data) {
   await axios.post(url, data);
 }
 
-export async function updateData( url, updatedSample ) {
+export async function updateData(url, updatedSample) {
   await axios.put(url, updatedSample);
 }
 

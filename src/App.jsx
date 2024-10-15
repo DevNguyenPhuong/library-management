@@ -51,6 +51,7 @@ function App() {
               <Route path="patrons" element={<PatronsPage />} />
               <Route path="patrons/:patronID" element={<PatronPage />} />
               <Route path="books" element={<BooksPage />} />
+              <Route path="addBook" element={<AddBook />} />
               <Route path="authors" element={<AuthorsPage />} />
               <Route path="categories" element={<CategoriesPage />} />
               <Route path="publishers" element={<PublishersPage />} />
