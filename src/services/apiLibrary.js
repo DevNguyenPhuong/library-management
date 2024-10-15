@@ -18,24 +18,3 @@ export async function updateData(url, updatedSample) {
 export async function deleteData(url) {
   await axios.delete(url);
 }
-
-export const getAllBooks = async ({
-  page,
-  size,
-  sortBy,
-  sortDirection,
-  title,
-  author,
-}) => {
-  const response = await axios.get(`/books`, {
-    params: { page, size, sortBy, sortDirection, title, author },
-  });
-  return response.data;
-};
-
-export const searchBooks = async ({ page, size, query }) => {
-  const response = await axios.get(`/books/search`, {
-    params: { page, size, query },
-  });
-  return response.data;
-};

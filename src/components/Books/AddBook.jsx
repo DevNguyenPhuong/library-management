@@ -58,6 +58,7 @@ export default function AddBook() {
         queryKey: [`books`],
       });
       toast.success("Add Success");
+      form.resetFields();
     },
     onError: (error) => {
       const { response } = error;
@@ -83,6 +84,20 @@ export default function AddBook() {
     );
   }
 
+  if (
+    authors?.length === 0 ||
+    categories?.length === 0 ||
+    publishers?.length === 0
+  ) {
+    return (
+      <Result
+        status="error"
+        title="Failed to load form data"
+        subTitle="Please try again later or contact support if the problem persists."
+      />
+    );
+  }
+
   const onFinish = (values) => {
     mutate(values);
   };
@@ -94,7 +109,7 @@ export default function AddBook() {
           <Button
             type="primary"
             icon={<HiArrowLeft />}
-            onClick={() => navigate(-1)}
+            onClick={() => navigate("/books")}
           >
             Back
           </Button>
