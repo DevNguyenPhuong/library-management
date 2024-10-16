@@ -8,7 +8,7 @@ function Patrons() {
   return (
     <>
       <Button className="mb-4" type="primary" icon={<HiPlus />} onClick={()=>navigate(`/addPatron`)}>
-        Add Patron
+        New Patron
       </Button>
       <PatronsTable />
     </>
