@@ -22,6 +22,7 @@ import AddAthors from "./components/Authors/AddAthors.jsx";
 import EditAuthor from "./components/Authors/EditAuthor.jsx";
 import AddPublisher from "./components/Publishers/AddPublisher.jsx";
 import EditPublisher from "./components/Publishers/EditPublisher.jsx";
+import AddBook from './components/Books/AddBook.jsx'
 import AddPatron from "./components/Patron/AddPatron.jsx";
 import AddBook from "./components/Books/AddBook.jsx";
 

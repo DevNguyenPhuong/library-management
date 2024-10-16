@@ -15,13 +15,28 @@ export default function BooksTable() {
     { header: "Actions", accessor: "actions" },
   ];
 
+  const { mutate: deletePatron } = useMutation({
+    mutationFn: (id) => deleteData(`/patrons/${id}`),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [`patrons`],
+      });
+    },
+
+    onError: (error) => {
+      const { response } = error;
+      toast.error(response?.data.message || "Opps, cannot perform this action");
+    },
+  });
+
+
   const handleDetail = (id) => {
-    console.log(`Patron ID: ${id}`);
-    // You can add more complex logic here, such as opening a modal or navigating to a detail page
+    navigate(`/patrons/${id}`);
   };
 
   const handleDelete = (id) => {
-    console.log(`Patron ID: ${id}`);
+    deletePatron(id)
   };
 
   const renderRow = (patron, columns) => (
