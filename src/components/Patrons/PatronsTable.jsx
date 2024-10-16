@@ -9,7 +9,7 @@ export default function BooksTable() {
     { header: "Name", accessor: "name" },
     { header: "Phone", accessor: "phone" },
     { header: "Gender", accessor: "gender" },
-    { header: "Status", accessor: "Status" },
+    { header: "Status", accessor: "status" },
     { header: "Currently borrowed", accessor: "currentlyBorrowed" },
     { header: "Membership Date", accessor: "membershipDate" },
     { header: "Actions", accessor: "actions" },
