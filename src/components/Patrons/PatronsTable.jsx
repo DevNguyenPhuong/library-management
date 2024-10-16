@@ -1,82 +1,43 @@
-import { useNavigate } from "react-router-dom";
-import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
-import { LoadingOutlined } from "@ant-design/icons";
-import { Result, Spin, Table, Button, Space, Tooltip } from "antd";
-import { PATRON_PAGE_SIZE } from "../../utils/constants";
-import { toast } from "react-hot-toast";
-import { getAllData, deleteData } from "../../services/apiLibrary";
-import { getPatronColumns } from "./patronColumns";
-import { prepareTableData } from "../Table/tableUtils";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { Button, Space, Tooltip } from "antd";
+import { getAllData } from "../../services/apiLibrary";
+import { PATRON_PAGE_SIZE } from "../../utils/constants";
 import { ReusableDataTable } from "../UI/Table/ReuseableDataTable";
 
-
-function PatronsTable() {
+export default function BooksTable() {
   const columns = [
     { header: "Name", accessor: "name" },
-    { header: "Date of Birth", accessor: "dob" },
+    { header: "Phone", accessor: "phone" },
     { header: "Gender", accessor: "gender" },
-    { header: "Currently Borrowed", accessor: "currentlyBorrowed" },
+    { header: "Status", accessor: "Status" },
+    { header: "Currently borrowed", accessor: "currentlyBorrowed" },
     { header: "Membership Date", accessor: "membershipDate" },
     { header: "Actions", accessor: "actions" },
   ];
 
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
-
-  const { mutate: deletePatron } = useMutation({
-    mutationFn: (id) => deleteData(`/patrons/${id}`),
-
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [`patrons`],
-      });
-    },
-
-    onError: (error) => {
-      const { response } = error;
-      toast.error(response?.data.message || "Opps, cannot perform this action");
-    },
-  });
-
-
   const handleDetail = (id) => {
-    navigate(`/patrons/${id}`);
+    console.log(`Patron ID: ${id}`);
+    // You can add more complex logic here, such as opening a modal or navigating to a detail page
   };
 
   const handleDelete = (id) => {
-    deletePatron(id)
+    console.log(`Patron ID: ${id}`);
   };
 
-  const renderRow = (patrons, columns) => (
-    <tr key={patrons.id}>
+  const renderRow = (patron, columns) => (
+    <tr key={patron.id}>
       {columns.map((column) => (
         <td
           key={column.accessor}
           className="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
         >
-          {column.accessor === "name" && (
-            <span>{patrons.name}</span>
-          )}
-          {column.accessor === "dob" && (
-            <span>{patrons.dob}</span>
-          )}
-          {column.accessor === "gender" && (
-            <span>{patrons.gender}</span>
-          )}
-          {column.accessor === "currentlyBorrowed" && (
-            <span>{patrons.currentlyBorrowed}</span>
-          )}
-          {column.accessor === "membershipDate" && (
-            <span>{patrons.membershipDate}</span>
-          )}
           {column.accessor === "actions" && (
             <Space size="middle">
               <Tooltip title="Edit">
                 <Button
                   type="primary"
                   icon={<EditOutlined />}
-                  onClick={() => handleDetail(patrons.id)}
+                  onClick={() => handleDetail(patron.id)}
                 />
               </Tooltip>
               <Tooltip title="Delete">
@@ -84,41 +45,29 @@ function PatronsTable() {
                   type="primary"
                   danger
                   icon={<DeleteOutlined />}
-                  onClick={() => handleDelete(patrons.id)}
+                  onClick={() => handleDelete(patron.id)}
                 />
               </Tooltip>
             </Space>
           )}
-          {![
-            "name",
-            "dob",
-            "gender",
-            "currentlyBorrowed",
-            "membershipDate",
-            "actions",
-          ].includes(column.accessor) && patrons[column.accessor]}
+          {!["actions"].includes(column.accessor) && patron[column.accessor]}
         </td>
       ))}
     </tr>
   );
 
-
   return (
-    <>
-      <ReusableDataTable
-        queryFn={({ page, size, query }) =>
-          getAllData(`/patrons?page=${page}&size=${PATRON_PAGE_SIZE}&query=${query}`)
-        }
-        searchPlaceHolder={"Search by name..."}
-        queryKey={["patrons"]}
-        columns={columns}
-        renderRow={renderRow}
-        pageSize={10}
-      />
-    </>
-
-
+    <ReusableDataTable
+      queryFn={({ page, size, query }) =>
+        getAllData(
+          `/patrons?page=${page}&size=${PATRON_PAGE_SIZE}&query=${query}`
+        )
+      }
+      searchPlaceHolder={"Search by name or id..."}
+      queryKey={["patrons"]}
+      columns={columns}
+      renderRow={renderRow}
+      pageSize={PATRON_PAGE_SIZE}
+    />
   );
 }
-
-export default PatronsTable;

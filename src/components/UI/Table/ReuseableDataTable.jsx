@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { HiArrowLeft, HiArrowRight, HiSearch } from "react-icons/hi";
 import { useSearchParams } from "react-router-dom";
 import CustomTable from "./CustomTable";
+import { Empty, Result, Spin } from "antd";
 
 export function ReusableDataTable({
   queryFn,
@@ -32,7 +33,30 @@ export function ReusableDataTable({
     setSearchParams({ page: newPage.toString(), query });
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading)
+    return (
+      <div className="min-h-[80vh] flex justify-center items-center">
+        <Spin size="large"></Spin>
+      </div>
+    );
+
+  if (error)
+    return (
+      <div className="min-h-[80vh] flex justify-center items-center">
+        <Result
+          status="error"
+          title="Error"
+          subTitle="Sorry, there was an error loading the data."
+        />
+      </div>
+    );
+
+  if (data?.content.length === 0 || !data)
+    return (
+      <div className="min-h-[80vh] flex justify-center items-center">
+        <Empty></Empty>
+      </div>
+    );
 
   const items = data?.content || [];
   const totalPages = data?.totalPages || 0;
@@ -54,15 +78,6 @@ export function ReusableDataTable({
           <HiSearch className="w-5 h-5" />
         </button>
       </form>
-
-      {error && (
-        <div
-          className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
-          role="alert"
-        >
-          <span className="block sm:inline">{error.message}</span>
-        </div>
-      )}
 
       <CustomTable columns={columns}>
         <CustomTable.Header>

@@ -95,7 +95,7 @@ export default function BooksTable() {
       queryKey={["books"]}
       columns={columns}
       renderRow={renderRow}
-      pageSize={10}
+      pageSize={BOOK_PAGE_SIZE}
     />
   );
 }
