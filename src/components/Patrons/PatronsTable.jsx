@@ -1,8 +1,12 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Button, Space, Tooltip } from "antd";
-import { getAllData } from "../../services/apiLibrary";
+import { getAllData, deleteData } from "../../services/apiLibrary";
 import { PATRON_PAGE_SIZE } from "../../utils/constants";
 import { ReusableDataTable } from "../UI/Table/ReuseableDataTable";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+
 
 export default function BooksTable() {
   const columns = [
@@ -15,6 +19,9 @@ export default function BooksTable() {
     { header: "Actions", accessor: "actions" },
   ];
 
+  const navigate = useNavigate();
+
+  const queryClient = useQueryClient();
   const { mutate: deletePatron } = useMutation({
     mutationFn: (id) => deleteData(`/patrons/${id}`),
 
