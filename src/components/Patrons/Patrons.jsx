@@ -4,10 +4,15 @@ import { HiPlus } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 
 function Patrons() {
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   return (
     <>
-      <Button className="mb-4" type="primary" icon={<HiPlus />} onClick={()=>navigate(`/addPatron`)}>
+      <Button
+        className="mb-4"
+        type="primary"
+        icon={<HiPlus />}
+        onClick={() => navigate(`/addPatron`)}
+      >
         New Patron
       </Button>
       <PatronsTable />

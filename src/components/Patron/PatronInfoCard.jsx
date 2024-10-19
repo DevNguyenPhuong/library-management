@@ -1,42 +1,40 @@
-import React, { useState } from "react";
-import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
-import { toast } from "react-hot-toast";
-import { IoMdArrowBack } from "react-icons/io";
-import { useNavigate, useParams } from "react-router-dom";
-import { updateData, getAllData } from "../../services/apiLibrary";
-import { LoadingOutlined } from "@ant-design/icons";
+import {
+  BookOutlined,
+  CalendarOutlined,
+  EditOutlined,
+  IdcardOutlined,
+  LoadingOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Avatar,
   Button,
   Card,
+  DatePicker,
   Descriptions,
   Form,
-  Modal,
   Input,
-  DatePicker,
+  Modal,
   Select,
+  Spin,
   Tag,
   Typography,
-  Result,
-  Spin
 } from "antd";
-import {
-  EditOutlined,
-  IdcardOutlined,
-  CalendarOutlined,
-  BookOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
+import React, { useState } from "react";
+import { toast } from "react-hot-toast";
+import { useNavigate, useParams } from "react-router-dom";
+import { getAllData, updateData } from "../../services/apiLibrary";
 
 import moment from "moment";
 
 const { Title } = Typography;
 const { Option } = Select;
 
-const PatronInfoCard = ({ patron, calculateAge, onUpdatePatron }) => {
+const PatronInfoCard = ({ calculateAge }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const showModal = () => {
     form.setFieldsValue({
@@ -49,11 +47,7 @@ const PatronInfoCard = ({ patron, calculateAge, onUpdatePatron }) => {
 
   const queryClient = useQueryClient();
   const { patronID } = useParams();
-  const {
-    data: data,
-    error,
-    isLoading
-  } = useQuery({
+  const { data, error, isLoading } = useQuery({
     queryFn: () => getAllData(`/patrons/${patronID}`),
     queryKey: ["patrons", patronID],
   });
@@ -74,6 +68,7 @@ const PatronInfoCard = ({ patron, calculateAge, onUpdatePatron }) => {
       toast.error(response?.data.message || "Opps, cannot perform this action");
     },
   });
+
   const onSubmit = () => {
     form.validateFields().then((values) => {
       updatePatron({
@@ -84,13 +79,14 @@ const PatronInfoCard = ({ patron, calculateAge, onUpdatePatron }) => {
       });
       setIsModalVisible(false);
     });
-    }
+  };
 
   const handleCancel = () => {
-      setIsModalVisible(false);
-    };
-    return (
-      <>{isLoading ? (
+    setIsModalVisible(false);
+  };
+  return (
+    <>
+      {isLoading ? (
         <div className="flex justify-center items-center h-screen">
           <Spin indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
         </div>
@@ -171,8 +167,6 @@ const PatronInfoCard = ({ patron, calculateAge, onUpdatePatron }) => {
             </Descriptions>
           </Card>
 
-
-
           <Modal
             title="Edit Patron Information"
             open={isModalVisible}
@@ -180,10 +174,7 @@ const PatronInfoCard = ({ patron, calculateAge, onUpdatePatron }) => {
             onCancel={handleCancel}
             className="modal"
           >
-            <Form
-              layout="vertical"
-              form={form}
-            >
+            <Form layout="vertical" form={form}>
               <Form.Item name="name" label="Name" rules={[{ required: true }]}>
                 <Input className="border border-gray-300 rounded-md" />
               </Form.Item>
@@ -194,7 +185,11 @@ const PatronInfoCard = ({ patron, calculateAge, onUpdatePatron }) => {
               >
                 <DatePicker className="w-full" />
               </Form.Item>
-              <Form.Item name="gender" label="Gender" rules={[{ required: true }]}>
+              <Form.Item
+                name="gender"
+                label="Gender"
+                rules={[{ required: true }]}
+              >
                 <Select className="border border-gray-300 rounded-md">
                   <Option value="MALE">Male</Option>
                   <Option value="FEMALE">Female</Option>
@@ -212,10 +207,8 @@ const PatronInfoCard = ({ patron, calculateAge, onUpdatePatron }) => {
           </Modal>
         </>
       )}
+    </>
+  );
+};
 
-
-      </>
-    );
-  };
-
-  export default PatronInfoCard;
+export default PatronInfoCard;

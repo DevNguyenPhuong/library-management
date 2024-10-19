@@ -2,12 +2,8 @@ import { Col, Row } from "antd";
 import moment from "moment";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
-import { borrowedBooks, fines, initialPatron } from "../../data/fakeData";
-import BorrowedBooksCard from "./BorrowedBooksCard";
-import FinesCard from "./FinesCard";
+import { initialPatron } from "../../data/fakeData";
 import PatronInfoCard from "./PatronInfoCard";
-
-import LoansTable from "../Patrons/LoansTable"
 
 const Patron = () => {
   const [patron, setPatron] = useState(initialPatron);
@@ -30,15 +26,6 @@ const Patron = () => {
             calculateAge={calculateAge}
             onUpdatePatron={handleUpdatePatron}
           />
-        </Col>
-        <Col xs={24} lg={12}>
-            <LoansTable/>
-        </Col>
-        <Col xs={36} lg={16}>
-          <BorrowedBooksCard borrowedBooks={borrowedBooks} />
-        </Col>
-        <Col xs={24}>
-          <FinesCard fines={fines} />
         </Col>
       </Row>
     </div>
