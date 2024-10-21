@@ -77,7 +77,6 @@ const PublishersTable = () => {
       dataSource={samples?.length === 0 ? [] : dataWithEmptyRows}
       pagination={{
         pageSize: PATRON_PAGE_SIZE,
-        showQuickJumper: true,
       }}
       bordered
     />

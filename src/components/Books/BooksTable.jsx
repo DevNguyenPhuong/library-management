@@ -3,21 +3,22 @@ import { getAllData } from "../../services/apiLibrary";
 import { BOOK_PAGE_SIZE } from "../../utils/constants";
 import { ReusableDataTable } from "../UI/Table/ReuseableDataTable";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 
 export default function BooksTable() {
+  const navigate = useNavigate();
   const columns = [
     { header: "Image", accessor: "image" },
     { header: "Title", accessor: "title" },
     { header: "Author(s)", accessor: "authors" },
-    { header: "Price", accessor: "price" },
+    { header: "Price(VNĐ)", accessor: "price" },
     { header: "Publisher", accessor: "publisher" },
     { header: "Categories", accessor: "categories" },
     { header: "Actions", accessor: "actions" },
   ];
 
   const handleDetail = (id) => {
-    console.log(`Book ID: ${id}`);
-    // You can add more complex logic here, such as opening a modal or navigating to a detail page
+    navigate(`/books/${id}`);
   };
 
   const handleDelete = (id) => {
@@ -52,11 +53,13 @@ export default function BooksTable() {
             </span>
           )}
           {column.accessor === "price" && (
-            <span>${(book.price / 100).toFixed(2)}</span>
+            <span>
+              {book.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+            </span>
           )}
           {column.accessor === "actions" && (
             <Space size="middle">
-              <Tooltip title="Edit">
+              <Tooltip title="Details">
                 <Button
                   type="primary"
                   icon={<EditOutlined />}
