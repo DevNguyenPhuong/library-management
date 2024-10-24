@@ -6,7 +6,6 @@ const api = axios.create({
 });
 
 const publicRoutes = [
-  "/users",
   "/auth/token",
   "/auth/introspect",
   "/auth/logout",

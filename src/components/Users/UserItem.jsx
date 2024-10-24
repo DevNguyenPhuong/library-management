@@ -1,10 +1,5 @@
-import {
-  EditOutlined,
-  DeleteOutlined,
-  UserOutlined,
-  PlusSquareOutlined,
-} from "@ant-design/icons";
-import { Card, Button, Tooltip, Typography, Avatar } from "antd";
+import { DeleteOutlined, EditOutlined, UserOutlined } from "@ant-design/icons";
+import { Avatar, Button, Card, Tooltip, Typography } from "antd";
 const { Text, Title } = Typography;
 
 function UserItem({ user, onEdit, onDelete }) {
@@ -20,24 +15,28 @@ function UserItem({ user, onEdit, onDelete }) {
           />
           <div>
             <Title level={4} className="text-gray-100 m-0 mb-1">
-              {user.username}
+              {user.name || "Amonymous"}
             </Title>
-            <Text className="text-gray-300 block">
-              {user.firstName} {user.lastName}
-            </Text>
+            <Text className="text-gray-300 block">{user.username}</Text>
           </div>
         </div>
         <div className="flex-grow">
           <Text className="text-gray-400 text-sm block mb-2">
-            Born: {user.dob}
+            Born: {user.dob || "N/A"}
+          </Text>
+          <Text className="text-gray-400 text-sm block mb-2">
+            Phone: {user.phone || "N/A"}
+          </Text>
+          <Text className="text-gray-400 text-sm block mb-2">
+            Gender: {user.gender || "Not specified"}
           </Text>
           <div className="flex flex-wrap gap-1 mb-4">
             {user.roles.map((role, index) => (
               <span
                 key={index}
-                className="px-2 py-1 bg-gray-700 text-gray-300 text-xs rounded-full"
+                className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full"
               >
-                {role}
+                {role.name}
               </span>
             ))}
           </div>
@@ -57,14 +56,6 @@ function UserItem({ user, onEdit, onDelete }) {
               icon={<DeleteOutlined />}
               onClick={() => onDelete(user.id)}
               className="text-red-400 hover:text-red-300 hover:bg-red-900/20"
-            />
-          </Tooltip>
-          <Tooltip title="Add role">
-            <Button
-              type="text"
-              icon={<PlusSquareOutlined />}
-              onClick={() => onDelete(user.id)}
-              className="text-indigo-400 hover:text-indigo-300 hover:bg-red-900/20"
             />
           </Tooltip>
         </div>
