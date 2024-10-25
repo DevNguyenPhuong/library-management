@@ -78,6 +78,8 @@ const CategoriesTable = () => {
       pagination={{
         pageSize: PATRON_PAGE_SIZE,
       }}
+      // headerBg='#ffff00'
+      // borderColor="#00ffff"
       bordered
     />
   );
