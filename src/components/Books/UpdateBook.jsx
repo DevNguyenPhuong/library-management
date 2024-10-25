@@ -16,7 +16,7 @@ import React from "react";
 import toast from "react-hot-toast";
 import { HiArrowLeft } from "react-icons/hi";
 import { useNavigate, useParams } from "react-router-dom";
-import { createData, getAllData, updateData } from "../../services/apiLibrary";
+import { getAllData, updateData } from "../../services/apiLibrary";
 
 export default function UpdateBook() {
   const { bookId } = useParams();

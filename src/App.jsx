@@ -25,6 +25,8 @@ import EditPublisher from "./components/Publishers/EditPublisher.jsx";
 import AddBook from "./components/Books/AddBook.jsx";
 import AddPatron from "./components/Patron/AddPatron.jsx";
 import BookPage from "./pages/BookPage.jsx";
+import AddUser from "./components/Users/AddUser.jsx";
+import EditUser from "./components/Users/EditUser.jsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -60,6 +62,8 @@ function App() {
               <Route path="publishers" element={<PublishersPage />} />
               <Route path="roles" element={<RolesPage />} />
               <Route path="users" element={<UsersPage />} />
+              <Route path="users/:userId" element={<EditUser />} />
+              <Route path="addUser" element={<AddUser />} />
               <Route path="addCategories" element={<AddCategories />} />
               <Route path="categories/:categoryID" element={<EditCategory />} />
               <Route path="addAuthor" element={<AddAthors />} />
