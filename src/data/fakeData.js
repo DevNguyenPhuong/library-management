@@ -263,7 +263,7 @@ export const fakeLoanData = [
     loanD: "2024-01-15",
     dueD: "2024-01-29",
     returnD: null,
-    status: "active",
+    status: "borrowed",
   },
   {
     id: "3",
@@ -307,7 +307,7 @@ export const fakeLoanData = [
     loanD: "2024-03-10",
     dueD: "2024-03-24",
     returnD: null,
-    status: "active",
+    status: "borrowed",
   },
   {
     id: "7",
@@ -329,7 +329,7 @@ export const fakeLoanData = [
     loanD: "2024-04-01",
     dueD: "2024-04-15",
     returnD: null,
-    status: "active",
+    status: "borrowed",
   },
   {
     id: "9",

@@ -14,7 +14,6 @@ const Patron = () => {
 
   const handleUpdatePatron = (updatedPatron) => {
     setPatron(updatedPatron);
-    console.log(updatedPatron);
     toast.success("Patron information updated successfully");
   };
 

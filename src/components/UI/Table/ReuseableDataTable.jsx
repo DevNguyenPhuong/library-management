@@ -11,7 +11,7 @@ export function ReusableDataTable({
   columns,
   renderRow,
   pageSize = 10,
-  searchPlaceHolder,
+  searchPlaceHolder,  
 }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const page = Number(searchParams.get("page") || "1");
@@ -50,6 +50,7 @@ export function ReusableDataTable({
         />
       </div>
     );
+    console.log(data);
 
   if (data?.content.length === 0 || !data)
     return (

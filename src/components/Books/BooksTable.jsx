@@ -1,12 +1,15 @@
 import { Button, Space, Tooltip } from "antd";
-import { getAllData } from "../../services/apiLibrary";
+import { getAllData, deleteData } from "../../services/apiLibrary";
 import { BOOK_PAGE_SIZE } from "../../utils/constants";
 import { ReusableDataTable } from "../UI/Table/ReuseableDataTable";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 export default function BooksTable() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const columns = [
     { header: "Image", accessor: "image" },
     { header: "Title", accessor: "title" },
@@ -17,12 +20,27 @@ export default function BooksTable() {
     { header: "Actions", accessor: "actions" },
   ];
 
+  const { mutate: deleteBook } = useMutation({
+    mutationFn: (id) => deleteData(`/books/${id}`),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [`books`],
+      });
+    },
+
+    onError: (error) => {
+      const { response } = error;
+      toast.error(response?.data.message || "Opps, cannot perform this action");
+    },
+  });
+
   const handleDetail = (id) => {
     navigate(`/books/${id}`);
   };
 
   const handleDelete = (id) => {
-    console.log(`Book ID: ${id}`);
+    deleteBook(id);
   };
 
   const renderRow = (book, columns) => (

@@ -3,19 +3,68 @@ import {
   ClockCircleOutlined,
   ReadOutlined,
   UserOutlined,
+  LoadingOutlined
 } from "@ant-design/icons";
-import { Col, Layout, Row } from "antd";
+import { Col, Layout, Row, Result, Spin, Table } from "antd";
 import React from "react";
-
-import { bookStats } from "../../data/fakeData";
+import { getAllData } from "../../services/apiLibrary";
+import { bookStats, borrowedBooks, fakeLoanData } from "../../data/fakeData";
 import BookCategoriesChart from "./BookCategoriesChart";
 import LibraryUtilization from "./LibraryUtilization";
 import MonthlyBookActivityChart from "./MonthlyBookActivityChart";
 import StatCard from "./StatCard";
+import { useQuery } from "@tanstack/react-query";
 
 const { Content } = Layout;
 
 export default function Dashboard() {
+  const {
+    data: totalBooks,
+    isLoading: isLoadingBookCopies, 
+    error: errorBookCopies,
+  }=useQuery({
+    queryFn:()=>getAllData('/book-copies'),
+    queryKey:['book-copies']
+  })
+
+  const {
+    data:patrons,
+    isLoading: isLoadingPatrons,
+    error: errorPatrons,
+  }=useQuery({
+    queryFn:()=>getAllData('/patrons'),
+    queryKey:['patrons']
+  })
+
+  if (isLoadingBookCopies || isLoadingPatrons) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Spin indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
+      </div>
+    );
+  }
+
+  if (errorBookCopies || errorPatrons) {
+    return (
+      <Result
+        status="error"
+        title="Error"
+        subTitle="Sorry, there was an error loading the sample data."
+      />
+    );
+  }
+
+  const borrowedBooks=fakeLoanData.filter((book)=>{
+    return book.status==="borrowed"
+  })
+
+  const activePatrons=patrons.content.filter((patron)=>{
+    return patron.status==="ACTIVE"
+  })
+
+  const overdueBooks=fakeLoanData.filter((book)=>{
+    return book.status==="overdue"
+  })
   return (
     <Layout className="min-h-screen bg-zinc-200">
       <Content className="p-6">
@@ -26,7 +75,7 @@ export default function Dashboard() {
           <Col xs={24} sm={12} lg={6}>
             <StatCard
               title="Total Books"
-              value={bookStats.totalBooks}
+              value={totalBooks?.length===0 ? 0: totalBooks.length}
               icon={<BookOutlined />}
               color="#FF6B6B"
             />
@@ -34,7 +83,7 @@ export default function Dashboard() {
           <Col xs={24} sm={12} lg={6}>
             <StatCard
               title="Borrowed Books"
-              value={bookStats.borrowedBooks}
+              value={borrowedBooks?.length===0 ? 0 : borrowedBooks.length}
               icon={<ReadOutlined />}
               color="#4ECDC4"
             />
@@ -42,7 +91,7 @@ export default function Dashboard() {
           <Col xs={24} sm={12} lg={6}>
             <StatCard
               title="Overdue Books"
-              value={bookStats.overdueBooks}
+              value={overdueBooks?.length===0 ? 0 : overdueBooks.length}
               icon={<ClockCircleOutlined />}
               color="#45B7D1"
             />
@@ -50,7 +99,7 @@ export default function Dashboard() {
           <Col xs={24} sm={12} lg={6}>
             <StatCard
               title="Active Members"
-              value={bookStats.activeMembers}
+              value={activePatrons?.length===0 ? 0 : activePatrons.length}
               icon={<UserOutlined />}
               color="#FFA07A"
             />
@@ -65,7 +114,12 @@ export default function Dashboard() {
           </Col>
 
           <Col xs={24}>
-            <LibraryUtilization />
+            <LibraryUtilization 
+            totalBooks={totalBooks.length} 
+            borrowedBooks={borrowedBooks.length} 
+            overdueBooks={overdueBooks.length} 
+            activePatrons={activePatrons.length}
+            />
           </Col>
         </Row>
       </Content>

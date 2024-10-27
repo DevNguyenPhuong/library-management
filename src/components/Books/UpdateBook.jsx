@@ -113,8 +113,6 @@ export default function UpdateBook() {
     );
   }
 
-  console.log(book);
-
   const onFinish = (values) => {
     mutate(values);
   };

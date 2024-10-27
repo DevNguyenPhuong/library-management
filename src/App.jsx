@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { ConfigProvider } from "antd";
+import { ConfigProvider, Table } from "antd";
 import { Toaster } from "react-hot-toast";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import AppLayout from "./components/UI/AppLayout";
@@ -16,12 +16,6 @@ import PatronPage from "./pages/PatronPage.jsx";
 import CategoriesPage from "./pages/CategoriesPage.jsx";
 import PublishersPage from "./pages/PublishersPage.jsx";
 import ProtectedRoute from "./components/UI/ProtectedRoute.jsx";
-import AddCategories from "./components/Categories/AddCategories.jsx";
-import EditCategory from "./components/Categories/EditCategory.jsx";
-import AddAthors from "./components/Authors/AddAthors.jsx";
-import EditAuthor from "./components/Authors/EditAuthor.jsx";
-import AddPublisher from "./components/Publishers/AddPublisher.jsx";
-import EditPublisher from "./components/Publishers/EditPublisher.jsx";
 import AddBook from "./components/Books/AddBook.jsx";
 import AddPatron from "./components/Patron/AddPatron.jsx";
 import BookPage from "./pages/BookPage.jsx";
@@ -40,7 +34,15 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools initialIsOpen={false} />
-      <ConfigProvider>
+      <ConfigProvider
+          theme={{
+            components: {
+              Table:{
+                headerColor:'rgb(67, 56, 202)'
+              }
+            },
+          }}
+      >
         <BrowserRouter>
           <Routes>
             <Route
@@ -64,15 +66,6 @@ function App() {
               <Route path="users" element={<UsersPage />} />
               <Route path="users/:userId" element={<EditUser />} />
               <Route path="addUser" element={<AddUser />} />
-              <Route path="addCategories" element={<AddCategories />} />
-              <Route path="categories/:categoryID" element={<EditCategory />} />
-              <Route path="addAuthor" element={<AddAthors />} />
-              <Route path="authors/:authorID" element={<EditAuthor />} />
-              <Route path="addPublisher" element={<AddPublisher />} />
-              <Route
-                path="publishers/:publisherID"
-                element={<EditPublisher />}
-              />
               <Route path="addPatron" element={<AddPatron />} />
             </Route>
 
