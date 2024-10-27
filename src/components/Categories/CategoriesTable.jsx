@@ -1,16 +1,21 @@
+import { useState } from "react";
 import { LoadingOutlined } from "@ant-design/icons";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
-import { Result, Spin, Table } from "antd";
-import { useNavigate } from "react-router-dom";
-import { getAllData, deleteData } from "../../services/apiLibrary";
+import { Result, Spin, Table, Form, Modal, Input } from "antd";
+import { getAllData, deleteData, updateData } from "../../services/apiLibrary";
 import { PATRON_PAGE_SIZE } from "../../utils/constants";
 import { prepareCategoriesTableData } from "../Table/tableUtils";
 import categoriesCols from "./categoriesCols";
 import { toast } from "react-hot-toast";
 
 const CategoriesTable = () => {
+  const [isModalVisible, setIsModalVisible] = useState(false)
+  const [form] = Form.useForm()
+  const { TextArea } = Input
+  const queryClient = useQueryClient();
+
   const {
-    data: samples,
+    data: categories,
     isLoading,
     error,
   } = useQuery({
@@ -19,9 +24,27 @@ const CategoriesTable = () => {
     select: (data) => data.sort((a, b) => a.name.localeCompare(b.name)),
   });
 
-  const navigate = useNavigate();
+  const {
+    mutate: updateCategory, isPending
+  } = useMutation({
+    mutationFn: (category) => {
+      updateData(`/categories/${category.id}`,category)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [`categories`],
+      });
+      toast.success("Update Success");
+    },
 
-  const queryClient = useQueryClient();
+    onError: (error) => {
+      const { response } = error;
+      toast.error(response?.data.message || "Opps, cannot perform this action");
+    },
+
+
+  })
+
   const { mutate: deleteCategory } = useMutation({
     mutationFn: (id) => deleteData(`/categories/${id}`),
 
@@ -29,6 +52,7 @@ const CategoriesTable = () => {
       queryClient.invalidateQueries({
         queryKey: [`categories`],
       });
+      toast.success("Delete Success");
     },
 
     onError: (error) => {
@@ -36,6 +60,20 @@ const CategoriesTable = () => {
       toast.error(response?.data.message || "Opps, cannot perform this action");
     },
   });
+
+
+  const onSubmit = () => {
+    form.validateFields().then((values) => {
+      updateCategory({
+        ...values
+      })
+      setIsModalVisible(false)
+    })
+  }
+
+  const handleCancel = () => {
+    setIsModalVisible(false)
+  }
 
   if (isLoading) {
     return (
@@ -55,8 +93,11 @@ const CategoriesTable = () => {
     );
   }
 
-  const handleEdit = (id) => {
-    navigate(`/categories/${id}`);
+  const handleEdit = (category) => {
+    form.setFieldsValue({
+      ...category
+    })
+    setIsModalVisible(true);
   };
 
   const handleDelete = (id) => {
@@ -66,22 +107,57 @@ const CategoriesTable = () => {
   const columns = categoriesCols(handleEdit, handleDelete);
   const emptyRowsCount = Math.max(
     0,
-    PATRON_PAGE_SIZE - (samples?.length % PATRON_PAGE_SIZE)
+    PATRON_PAGE_SIZE - (categories?.length % PATRON_PAGE_SIZE)
   );
 
-  const dataWithEmptyRows = prepareCategoriesTableData(samples, emptyRowsCount);
+  const dataWithEmptyRows = prepareCategoriesTableData(categories, emptyRowsCount);
   return (
-    <Table
-      className="shadow-lg rounded-lg"
-      columns={columns}
-      dataSource={samples?.length === 0 ? [] : dataWithEmptyRows}
-      pagination={{
-        pageSize: PATRON_PAGE_SIZE,
-      }}
-      // headerBg='#ffff00'
-      // borderColor="#00ffff"
-      bordered
-    />
+    <>
+      <Table
+        className="shadow-lg rounded-lg"
+        columns={columns}
+        dataSource={categories?.length === 0 ? [] : dataWithEmptyRows}
+        pagination={{
+          pageSize: PATRON_PAGE_SIZE,
+        }}
+        bordered
+        borderColor='#ffff00'
+      />
+      <Modal
+        title="Update Category"
+        open={isModalVisible}
+        onOk={onSubmit}
+        onCancel={handleCancel}
+      >
+        <Form layout="vertical" form={form}>
+          <Form.Item
+            name="name"
+            label="Name"
+            rules={[{ required: true }]}
+          >
+            <Input className="w-full" />
+          </Form.Item>
+          <Form.Item
+            name="description"
+            label="Description"
+            rules={[{ required: true }]}
+          >
+          <TextArea
+            placeholder="Tell somethings about this category"
+            showCount
+            maxLength={400}
+            disabled={isPending}
+            rows={5}
+          />          
+          </Form.Item>
+          <Form.Item
+            name="id"
+          >
+          </Form.Item>
+        </Form>
+      </Modal>
+    </>
+
   );
 };
 

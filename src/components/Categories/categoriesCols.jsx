@@ -31,7 +31,9 @@ const categoriesCols = (handleEdit, handleDelete) => {
                 <Button
                   type="primary"
                   icon={<EditOutlined />}
-                  onClick={() => handleEdit(record.key)}
+                  onClick={() =>{                    
+                    handleEdit(record)
+                  } }
                 />
               </Tooltip>
               {/* <Tooltip title="Delete">

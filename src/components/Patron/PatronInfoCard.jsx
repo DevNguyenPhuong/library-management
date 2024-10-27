@@ -210,6 +210,21 @@ const PatronInfoCard = ({ calculateAge }) => {
               <Option value="OTHER">Other</Option>
             </Select>
           </Form.Item>
+          <Form.Item name="status" label="Status" rules={[{ required: true }]}>
+            <Select
+              disabled={isPending}
+              className="border border-gray-300 rounded-md"
+            >
+              <Option value="ACTIVE">Active</Option>
+              <Option value="INACTIVE">Inactive</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item name="phone" label="Phone" rules={[{ required: true }]}>
+            <Input
+              className="border border-gray-300 rounded-md"
+              disabled={isPending}
+            />
+          </Form.Item>
           <Form.Item
             name="membershipDate"
             label="Membership Date"

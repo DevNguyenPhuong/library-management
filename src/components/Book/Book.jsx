@@ -24,7 +24,6 @@ import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 
 function BookCopies() {
-  const { Option } = Select;
   const [isModalVisible, setIsModalVisible] = useState(false);
   const queryClient = useQueryClient();
   const [form] = Form.useForm();
@@ -41,6 +40,7 @@ function BookCopies() {
 
   const handleCancel = () => {
     setIsModalVisible(false);
+    form.resetFields();
   };
   const { mutate, isPending } = useMutation({
     mutationFn: (bookCopies) => createData(`/book-copies`, bookCopies),
@@ -50,10 +50,13 @@ function BookCopies() {
         queryKey: [`book-copies`],
       });
       toast.success("Add Success");
+      form.resetFields();
+
     },
     onError: (error) => {
       const { response } = error;
       toast.error(response?.data.message || "Opps, cannot perform this action");
+      form.resetFields();
     },
   });
   return (
@@ -76,7 +79,7 @@ function BookCopies() {
       </div>
       <BookCopiesTable />
       <Modal
-        title="Add BookCopies Copied"
+        title="Add Book Copied"
         open={isModalVisible}
         onOk={onSubmit}
         onCancel={handleCancel}
