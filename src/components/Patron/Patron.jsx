@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { initialPatron } from "../../data/fakeData";
 import PatronInfoCard from "./PatronInfoCard";
+import CreateLoanForm from "./CreateLoanForm";
 
 const Patron = () => {
   const [patron, setPatron] = useState(initialPatron);
@@ -20,12 +21,19 @@ const Patron = () => {
   return (
     <div style={{ padding: "24px", background: "#f0f2f5", minHeight: "100vh" }}>
       <Row gutter={[24, 24]}>
-        <Col xs={24} lg={12}>
+        <Col xs={24} lg={10}>
           <PatronInfoCard
             patron={patron}
             calculateAge={calculateAge}
             onUpdatePatron={handleUpdatePatron}
           />
+        </Col>
+        <Col xs={24} lg={14}>
+          <CreateLoanForm />
+        </Col>
+
+        <Col xs={24} lg={24}>
+          <CreateLoanForm />
         </Col>
       </Row>
     </div>

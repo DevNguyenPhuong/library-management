@@ -16,6 +16,8 @@ export function useLogin() {
     onSuccess: (response, payload) => {
       localStorage.setItem("token", response?.result?.token);
       localStorage.setItem("authenticated", response?.result?.authenticated);
+      localStorage.setItem("id", response?.result?.id);
+      localStorage.setItem("name", response?.result?.name);
       dispatch(setUser({ ...response?.result }));
       navigate("/dashboard");
     },

@@ -153,7 +153,13 @@ const PatronInfoCard = ({ calculateAge }) => {
           >
             {data.dob} (Age: {calculateAge(data.dob)})
           </Descriptions.Item>
-          <Descriptions.Item label="Gender">
+          <Descriptions.Item
+            label={
+              <>
+                <CalendarOutlined /> Gender
+              </>
+            }
+          >
             <Tag color={data.gender === "MALE" ? "blue" : "pink"}>
               {data.gender}
             </Tag>
