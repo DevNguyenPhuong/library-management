@@ -34,7 +34,7 @@ function CreateLoanForm() {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-lg">
+    <div className="bg-white p-6 rounded-lg shadow-lg h-full">
       <h2 className="text-2xl font-semibold text-gray-800 mb-6">New Loan</h2>
 
       <Form form={form} layout="vertical" onFinish={handleSubmit}>

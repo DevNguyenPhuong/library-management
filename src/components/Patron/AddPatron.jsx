@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Button, DatePicker, Form, Input, Select, Card, Row, Col, } from "antd";
+import { Button, DatePicker, Form, Input, Select, Card, Row, Col } from "antd";
 import React from "react";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +8,6 @@ import { format } from "date-fns";
 import { IoMdArrowBack } from "react-icons/io";
 import { HiArrowLeft } from "react-icons/hi";
 import { BookOutlined } from "@ant-design/icons";
-
 
 const AddPatron = () => {
   const navigate = useNavigate();
@@ -33,7 +32,7 @@ const AddPatron = () => {
     mutate({
       ...values,
       currentlyBorrowed: 0,
-      status: 'ACTIVE',
+      status: "ACTIVE",
       dob: format(values.dob.$d, "yyyy-MM-dd"),
       membershipDate: format(values.membershipDate.$d, "yyyy-MM-dd"),
     });
@@ -96,7 +95,6 @@ const AddPatron = () => {
             </Col>
           </Row>
 
-
           <Row gutter={24}>
             <Col xs={24} md={12}>
               <Form.Item
@@ -144,9 +142,7 @@ const AddPatron = () => {
                   },
                 ]}
               >
-                <DatePicker         
-                className="w-full"
-                disabled={isPending} />
+                <DatePicker className="w-full" disabled={isPending} />
               </Form.Item>
             </Col>
             <Col xs={24} md={12}>
@@ -160,22 +156,18 @@ const AddPatron = () => {
                   },
                 ]}
               >
-                <DatePicker 
-                className="w-full"
-                disabled={isPending} />
+                <DatePicker className="w-full" disabled={isPending} />
               </Form.Item>
             </Col>
           </Row>
-          <Form.Item
-            className="flex justify-center"
-          >
+          <Form.Item className="flex justify-center">
             <Button type="primary" htmlType="submit">
               Submit
             </Button>
           </Form.Item>
         </Form>
       </Card>
-    </div >
+    </div>
   );
 };
 

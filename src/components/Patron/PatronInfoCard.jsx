@@ -26,8 +26,7 @@ import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import { getAllData, updateData } from "../../services/apiLibrary";
-
-import moment from "moment";
+import dayjs from "dayjs";
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -39,8 +38,8 @@ const PatronInfoCard = ({ calculateAge }) => {
   const showModal = () => {
     form.setFieldsValue({
       ...data,
-      dob: moment(data.dob),
-      membershipDate: moment(data.membershipDate),
+      dob: data.dob ? dayjs(data.dob) : null,
+      membershipDate: data.membershipDate ? dayjs(data.membershipDate) : null,
     });
     setIsModalVisible(true);
   };

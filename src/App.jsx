@@ -1,26 +1,26 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { ConfigProvider, Table } from "antd";
+import { ConfigProvider } from "antd";
 import { Toaster } from "react-hot-toast";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import AddBook from "./components/Books/AddBook.jsx";
+import AddPatron from "./components/Patron/AddPatron.jsx";
 import AppLayout from "./components/UI/AppLayout";
+import ProtectedRoute from "./components/UI/ProtectedRoute.jsx";
+import AddUser from "./components/Users/AddUser.jsx";
+import EditUser from "./components/Users/EditUser.jsx";
 import AuthorsPage from "./pages/AuthorsPage.jsx";
+import BookPage from "./pages/BookPage.jsx";
 import BooksPage from "./pages/BooksPage.jsx";
+import CategoriesPage from "./pages/CategoriesPage.jsx";
 import DashboardPage from "./pages/DashboardPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import PageNotFound from "./pages/PageNotFound";
+import PatronPage from "./pages/PatronPage.jsx";
 import PatronsPage from "./pages/PatronsPage.jsx";
+import PublishersPage from "./pages/PublishersPage.jsx";
 import RolesPage from "./pages/RolesPage.jsx";
 import UsersPage from "./pages/UsersPage.jsx";
-import PatronPage from "./pages/PatronPage.jsx";
-import CategoriesPage from "./pages/CategoriesPage.jsx";
-import PublishersPage from "./pages/PublishersPage.jsx";
-import ProtectedRoute from "./components/UI/ProtectedRoute.jsx";
-import AddBook from "./components/Books/AddBook.jsx";
-import AddPatron from "./components/Patron/AddPatron.jsx";
-import BookPage from "./pages/BookPage.jsx";
-import AddUser from "./components/Users/AddUser.jsx";
-import EditUser from "./components/Users/EditUser.jsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -30,19 +30,19 @@ const queryClient = new QueryClient({
   },
 });
 
+const andConfig = {
+  components: {
+    Table: {
+      headerColor: "rgb(67, 56, 202)",
+    },
+  },
+};
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools initialIsOpen={false} />
-      <ConfigProvider
-          theme={{
-            components: {
-              Table:{
-                headerColor:'rgb(67, 56, 202)'
-              }
-            },
-          }}
-      >
+      <ConfigProvider theme={andConfig}>
         <BrowserRouter>
           <Routes>
             <Route
