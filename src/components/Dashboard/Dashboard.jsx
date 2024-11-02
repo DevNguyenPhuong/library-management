@@ -1,40 +1,40 @@
 import {
   BookOutlined,
   ClockCircleOutlined,
+  LoadingOutlined,
   ReadOutlined,
   UserOutlined,
-  LoadingOutlined
 } from "@ant-design/icons";
-import { Col, Layout, Row, Result, Spin, Table } from "antd";
+import { useQuery } from "@tanstack/react-query";
+import { Col, Layout, Result, Row, Spin } from "antd";
 import React from "react";
+import { fakeLoanData } from "../../data/fakeData";
 import { getAllData } from "../../services/apiLibrary";
-import { bookStats, borrowedBooks, fakeLoanData } from "../../data/fakeData";
 import BookCategoriesChart from "./BookCategoriesChart";
 import LibraryUtilization from "./LibraryUtilization";
 import MonthlyBookActivityChart from "./MonthlyBookActivityChart";
 import StatCard from "./StatCard";
-import { useQuery } from "@tanstack/react-query";
 
 const { Content } = Layout;
 
 export default function Dashboard() {
   const {
     data: totalBooks,
-    isLoading: isLoadingBookCopies, 
+    isLoading: isLoadingBookCopies,
     error: errorBookCopies,
-  }=useQuery({
-    queryFn:()=>getAllData('/book-copies'),
-    queryKey:['book-copies']
-  })
+  } = useQuery({
+    queryFn: () => getAllData("/book-copies"),
+    queryKey: ["book-copies"],
+  });
 
   const {
-    data:patrons,
+    data: patrons,
     isLoading: isLoadingPatrons,
     error: errorPatrons,
-  }=useQuery({
-    queryFn:()=>getAllData('/patrons'),
-    queryKey:['patrons']
-  })
+  } = useQuery({
+    queryFn: () => getAllData("/patrons"),
+    queryKey: ["patrons"],
+  });
 
   if (isLoadingBookCopies || isLoadingPatrons) {
     return (
@@ -54,17 +54,17 @@ export default function Dashboard() {
     );
   }
 
-  const borrowedBooks=fakeLoanData.filter((book)=>{
-    return book.status==="borrowed"
-  })
+  const borrowedBooks = fakeLoanData.filter((book) => {
+    return book.status === "borrowed";
+  });
 
-  const activePatrons=patrons.content.filter((patron)=>{
-    return patron.status==="ACTIVE"
-  })
+  const activePatrons = patrons.content.filter((patron) => {
+    return patron.status === "ACTIVE";
+  });
 
-  const overdueBooks=fakeLoanData.filter((book)=>{
-    return book.status==="overdue"
-  })
+  const overdueBooks = fakeLoanData.filter((book) => {
+    return book.status === "overdue";
+  });
   return (
     <Layout className="min-h-screen bg-zinc-200">
       <Content className="p-6">
@@ -75,7 +75,7 @@ export default function Dashboard() {
           <Col xs={24} sm={12} lg={6}>
             <StatCard
               title="Total Books"
-              value={totalBooks?.length===0 ? 0: totalBooks.length}
+              value={totalBooks?.length === 0 ? 0 : totalBooks.length}
               icon={<BookOutlined />}
               color="#FF6B6B"
             />
@@ -83,7 +83,7 @@ export default function Dashboard() {
           <Col xs={24} sm={12} lg={6}>
             <StatCard
               title="Borrowed Books"
-              value={borrowedBooks?.length===0 ? 0 : borrowedBooks.length}
+              value={borrowedBooks?.length === 0 ? 0 : borrowedBooks.length}
               icon={<ReadOutlined />}
               color="#4ECDC4"
             />
@@ -91,7 +91,7 @@ export default function Dashboard() {
           <Col xs={24} sm={12} lg={6}>
             <StatCard
               title="Overdue Books"
-              value={overdueBooks?.length===0 ? 0 : overdueBooks.length}
+              value={overdueBooks?.length === 0 ? 0 : overdueBooks.length}
               icon={<ClockCircleOutlined />}
               color="#45B7D1"
             />
@@ -99,7 +99,7 @@ export default function Dashboard() {
           <Col xs={24} sm={12} lg={6}>
             <StatCard
               title="Active Members"
-              value={activePatrons?.length===0 ? 0 : activePatrons.length}
+              value={activePatrons?.length === 0 ? 0 : activePatrons.length}
               icon={<UserOutlined />}
               color="#FFA07A"
             />
@@ -114,11 +114,11 @@ export default function Dashboard() {
           </Col>
 
           <Col xs={24}>
-            <LibraryUtilization 
-            totalBooks={totalBooks.length} 
-            borrowedBooks={borrowedBooks.length} 
-            overdueBooks={overdueBooks.length} 
-            activePatrons={activePatrons.length}
+            <LibraryUtilization
+              totalBooks={totalBooks.length}
+              borrowedBooks={borrowedBooks.length}
+              overdueBooks={overdueBooks.length}
+              activePatrons={activePatrons.length}
             />
           </Col>
         </Row>
