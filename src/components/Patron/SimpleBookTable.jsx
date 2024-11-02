@@ -2,7 +2,7 @@ import { EyeFilled } from "@ant-design/icons";
 import { Button, Space, Tooltip } from "antd";
 import { useState } from "react";
 import { getAllData } from "../../services/apiLibrary";
-import { BOOK_PAGE_SIZE } from "../../utils/constants";
+import { SIMPLE_BOOK_PAGE_SIZE } from "../../utils/constants";
 import { ReusableDataTable } from "../UI/Table/ReuseableDataTable";
 import AvailableCopiesModal from "./AvailableCopiesModal";
 
@@ -55,14 +55,14 @@ export default function SimpleBookTable({ setBookCopyId }) {
       <ReusableDataTable
         queryFn={({ page, query }) =>
           getAllData(
-            `/books?page=${page}&size=${BOOK_PAGE_SIZE}&query=${query}`
+            `/books?page=${page}&size=${SIMPLE_BOOK_PAGE_SIZE}&query=${query}`
           )
         }
         searchPlaceHolder={"Search by title or author..."}
         queryKey={["books"]}
         columns={columns}
         renderRow={renderRow}
-        pageSize={BOOK_PAGE_SIZE}
+        pageSize={SIMPLE_BOOK_PAGE_SIZE}
       />
       <AvailableCopiesModal
         book={selectedBook}
