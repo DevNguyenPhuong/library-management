@@ -1,21 +1,19 @@
 import { LoadingOutlined } from "@ant-design/icons";
-import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
-import { Result, Spin, Table, Form, Modal, Input } from "antd";
-import { useNavigate } from "react-router-dom";
-import { getAllData, deleteData, updateData } from "../../services/apiLibrary";
-import { PATRON_PAGE_SIZE } from "../../utils/constants";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Form, Input, Modal, Result, Spin, Table } from "antd";
+import { useState } from "react";
+import { toast } from "react-hot-toast";
+import { deleteData, getAllData, updateData } from "../../services/apiLibrary";
+import { PAGE_SIZE } from "../../utils/constants";
 import { preparePublishersTableData } from "../Table/tableUtils";
 import publishersCols from "./publishersCols";
-import { toast } from "react-hot-toast";
-import { useState } from "react";
 
 const PublishersTable = () => {
-  const [isModalVisible, setIsModalVisible] = useState(false)
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
-  const { TextArea } = Input
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
+  const { TextArea } = Input;
 
+  const queryClient = useQueryClient();
 
   const {
     data: samples,
@@ -27,21 +25,22 @@ const PublishersTable = () => {
     select: (data) => data.sort((a, b) => a.name.localeCompare(b.name)),
   });
 
-  const{mutate:updatePublisher, isPending}=useMutation({
-    mutationFn:(publisher)=>updateData(`/publishers/${publisher.id}`,publisher),
+  const { mutate: updatePublisher, isPending } = useMutation({
+    mutationFn: (publisher) =>
+      updateData(`/publishers/${publisher.id}`, publisher),
 
-    onSuccess:()=>{
+    onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey:[`publishers`]
+        queryKey: [`publishers`],
       });
-      toast.success('Update Success')
+      toast.success("Update Success");
     },
 
-    onError:(error)=>{
-      const {respone}=error
-      toast.error(respone?.data.message||"Opps, cannot perform this action")
-    }
-  })
+    onError: (error) => {
+      const { respone } = error;
+      toast.error(respone?.data.message || "Opps, cannot perform this action");
+    },
+  });
 
   const { mutate: deletePublisher } = useMutation({
     mutationFn: (id) => deleteData(`/publishers/${id}`),
@@ -50,7 +49,7 @@ const PublishersTable = () => {
       queryClient.invalidateQueries({
         queryKey: [`publishers`],
       });
-      toast.success("Delete Success")
+      toast.success("Delete Success");
     },
 
     onError: (error) => {
@@ -78,32 +77,29 @@ const PublishersTable = () => {
   }
 
   const handleEdit = (publisher) => {
-    form.setFieldsValue({...publisher});
+    form.setFieldsValue({ ...publisher });
     setIsModalVisible(true);
   };
 
-  const onSubmit = ()=>{
-    form.validateFields().then((values)=>{
+  const onSubmit = () => {
+    form.validateFields().then((values) => {
       updatePublisher({
-        ...values
-      })
-      setIsModalVisible(false)
-    })
-  }
+        ...values,
+      });
+      setIsModalVisible(false);
+    });
+  };
 
-  const handleCancel = ()=>{
-    setIsModalVisible(false)
-  }
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
 
   const handleDelete = (id) => {
     deletePublisher(id);
   };
 
   const columns = publishersCols(handleEdit, handleDelete);
-  const emptyRowsCount = Math.max(
-    0,
-    PATRON_PAGE_SIZE - (samples?.length % PATRON_PAGE_SIZE)
-  );
+  const emptyRowsCount = Math.max(0, PAGE_SIZE - (samples?.length % PAGE_SIZE));
 
   const dataWithEmptyRows = preparePublishersTableData(samples, emptyRowsCount);
   return (
@@ -111,9 +107,16 @@ const PublishersTable = () => {
       <Table
         className="shadow-lg rounded-lg"
         columns={columns}
-        dataSource={samples?.length === 0 ? [] : dataWithEmptyRows}
+        dataSource={
+          samples?.length === 0
+            ? []
+            : samples?.length % PAGE_SIZE === 0
+            ? samples
+            : dataWithEmptyRows
+        }
+        rowKey="id"
         pagination={{
-          pageSize: PATRON_PAGE_SIZE,
+          pageSize: PAGE_SIZE,
         }}
         bordered
       />
@@ -124,11 +127,7 @@ const PublishersTable = () => {
         onCancel={handleCancel}
       >
         <Form layout="vertical" form={form}>
-          <Form.Item
-            name="name"
-            label="Name"
-            rules={[{ required: true }]}
-          >
+          <Form.Item name="name" label="Name" rules={[{ required: true }]}>
             <Input className="w-full" />
           </Form.Item>
           <Form.Item
@@ -144,10 +143,7 @@ const PublishersTable = () => {
               rows={5}
             />
           </Form.Item>
-          <Form.Item
-            name="id"
-          >
-          </Form.Item>
+          <Form.Item name="id"></Form.Item>
         </Form>
       </Modal>
     </>

@@ -1,15 +1,12 @@
-import { useState } from "react";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import {
-  Button, Space, Tooltip, Form, Modal, Select
-} from "antd";
-import { deleteData, getAllData, updateData } from "../../services/apiLibrary";
-import { PATRON_PAGE_SIZE } from "../../utils/constants";
-import { ReusableDataTable } from "../UI/Table/ReuseableDataTable";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Button, Form, Modal, Select, Space, Tooltip } from "antd";
+import { useState } from "react";
 import toast from "react-hot-toast";
-import { useNavigate, useParams } from "react-router-dom";
-
+import { useParams } from "react-router-dom";
+import { deleteData, getAllData, updateData } from "../../services/apiLibrary";
+import { BOOK_COPIES_PAGE_SIZE } from "../../utils/constants";
+import { ReusableDataTable } from "../UI/Table/ReuseableDataTable";
 
 function BookCopiesTable() {
   const { bookId } = useParams();
@@ -38,7 +35,7 @@ function BookCopiesTable() {
   const onSubmit = () => {
     form.validateFields().then((values) => {
       updateBookCopies({
-        ...values
+        ...values,
       });
       setIsModalVisible(false);
     });
@@ -47,7 +44,6 @@ function BookCopiesTable() {
   const handleCancel = () => {
     setIsModalVisible(false);
   };
-
 
   const columns = [
     { header: "ID", accessor: "id" },
@@ -69,8 +65,6 @@ function BookCopiesTable() {
       toast.error(response?.data.message || "Opps, cannot perform this action");
     },
   });
-
-
 
   const handleDetail = (data) => {
     form.setFieldsValue({
@@ -96,7 +90,7 @@ function BookCopiesTable() {
                 <Button
                   type="primary"
                   icon={<EditOutlined />}
-                  disabled={bookCopied.status === 'CHECKOUT'}
+                  disabled={bookCopied.status === "CHECKOUT"}
                   onClick={() => handleDetail(bookCopied)}
                 />
               </Tooltip>
@@ -110,7 +104,8 @@ function BookCopiesTable() {
               </Tooltip>
             </Space>
           )}
-          {!["actions"].includes(column.accessor) && bookCopied[column.accessor]}
+          {!["actions"].includes(column.accessor) &&
+            bookCopied[column.accessor]}
         </td>
       ))}
     </tr>
@@ -121,14 +116,14 @@ function BookCopiesTable() {
       <ReusableDataTable
         queryFn={({ page, size, query }) =>
           getAllData(
-            `/books/${bookId}/copies?page=${page}&size=${PATRON_PAGE_SIZE}&query=${query}`
+            `/books/${bookId}/copies?page=${page}&size=${BOOK_COPIES_PAGE_SIZE}&query=${query}`
           )
         }
-        searchPlaceHolder={"Search by name or id..."}
+        searchPlaceHolder={"Search by id..."}
         queryKey={["book-copies"]}
         columns={columns}
         renderRow={renderRow}
-        pageSize={PATRON_PAGE_SIZE}
+        pageSize={BOOK_COPIES_PAGE_SIZE}
       />
       <Modal
         title="Update Book Copied"
@@ -137,15 +132,8 @@ function BookCopiesTable() {
         onCancel={handleCancel}
       >
         <Form layout="horizontal" form={form}>
-          <Form.Item
-            name="id"
-          >
-          </Form.Item>
-          <Form.Item
-            name="status"
-            label="Status"
-            rules={[{ required: true }]}
-          >
+          <Form.Item name="id"></Form.Item>
+          <Form.Item name="status" label="Status" rules={[{ required: true }]}>
             <Select
               disabled={isPending}
               className="border border-gray-300 rounded-md"
@@ -158,8 +146,6 @@ function BookCopiesTable() {
         </Form>
       </Modal>
     </>
-
-
   );
 }
 

@@ -1,21 +1,18 @@
 import { LoadingOutlined } from "@ant-design/icons";
-import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
-import { Result, Spin, Table, Form, Modal, Input } from "antd";
-import { useNavigate } from "react-router-dom";
-import { getAllData, deleteData, updateData } from "../../services/apiLibrary";
-import { PATRON_PAGE_SIZE } from "../../utils/constants";
-import { prepareAuthorsTableData } from "../Table/tableUtils";
-import { toast } from "react-hot-toast";
-import authorsCols from "./authorsCols";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Form, Input, Modal, Result, Spin, Table } from "antd";
 import { useState } from "react";
-import { values } from "lodash";
+import { toast } from "react-hot-toast";
+import { deleteData, getAllData, updateData } from "../../services/apiLibrary";
+import { PAGE_SIZE } from "../../utils/constants";
+import { prepareAuthorsTableData } from "../Table/tableUtils";
+import authorsCols from "./authorsCols";
 
 const AuthorsTable = () => {
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const [isModalVisible, setIsModalVisible] = useState(false)
-  const [form] = Form.useForm()
-  const { TextArea } = Input
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [form] = Form.useForm();
+  const { TextArea } = Input;
 
   const {
     data: samples,
@@ -32,16 +29,16 @@ const AuthorsTable = () => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [`authors`]
-      })
-      toast.success('Update Success');
+        queryKey: [`authors`],
+      });
+      toast.success("Update Success");
     },
 
     onError: (error) => {
-      const { respone } = error
-      toast.error(respone?.data.message || "Opps, cannot perform this action")
-    }
-  })
+      const { respone } = error;
+      toast.error(respone?.data.message || "Opps, cannot perform this action");
+    },
+  });
 
   const { mutate: deleteAuthor } = useMutation({
     mutationFn: (id) => deleteData(`/authors/${id}`),
@@ -76,24 +73,24 @@ const AuthorsTable = () => {
     );
   }
 
-  const onSubmit=()=>{
-    form.validateFields().then((values)=>{
+  const onSubmit = () => {
+    form.validateFields().then((values) => {
       updateAuthor({
-        ...values
-      })
-      setIsModalVisible(false)
-    })
-  }
+        ...values,
+      });
+      setIsModalVisible(false);
+    });
+  };
 
-  const handleCancel=()=>{
-    setIsModalVisible(false)
-  }
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
 
   const handleEdit = (author) => {
     form.setFieldsValue({
-      ...author
-    })
-    setIsModalVisible(true)
+      ...author,
+    });
+    setIsModalVisible(true);
   };
 
   const handleDelete = (id) => {
@@ -101,10 +98,7 @@ const AuthorsTable = () => {
   };
 
   const columns = authorsCols(handleEdit, handleDelete);
-  const emptyRowsCount = Math.max(
-    0,
-    PATRON_PAGE_SIZE - (samples?.length % PATRON_PAGE_SIZE)
-  );
+  const emptyRowsCount = Math.max(0, PAGE_SIZE - (samples?.length % PAGE_SIZE));
 
   const dataWithEmptyRows = prepareAuthorsTableData(samples, emptyRowsCount);
   return (
@@ -112,24 +106,27 @@ const AuthorsTable = () => {
       <Table
         className="shadow-lg rounded-lg"
         columns={columns}
-        dataSource={samples?.length === 0 ? [] : dataWithEmptyRows}
+        dataSource={
+          samples?.length === 0
+            ? []
+            : samples?.length % PAGE_SIZE === 0
+            ? samples
+            : dataWithEmptyRows
+        }
+        rowKey="id"
         pagination={{
-          pageSize: PATRON_PAGE_SIZE,
+          pageSize: PAGE_SIZE,
         }}
         bordered
       />
-            <Modal
+      <Modal
         title="Add New Author"
         open={isModalVisible}
         onOk={onSubmit}
         onCancel={handleCancel}
       >
         <Form layout="vertical" form={form}>
-          <Form.Item
-            name="name"
-            label="Name"
-            rules={[{ required: true }]}
-          >
+          <Form.Item name="name" label="Name" rules={[{ required: true }]}>
             <Input className="w-full" />
           </Form.Item>
           <Form.Item
@@ -145,15 +142,10 @@ const AuthorsTable = () => {
               rows={5}
             />
           </Form.Item>
-          <Form.Item
-            name="id"
-          >
-          </Form.Item>
+          <Form.Item name="id"></Form.Item>
         </Form>
       </Modal>
     </>
-
-
   );
 };
 
