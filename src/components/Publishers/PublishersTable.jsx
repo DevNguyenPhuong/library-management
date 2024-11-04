@@ -42,6 +42,7 @@ const PublishersTable = () => {
     },
   });
 
+
   const { mutate: deletePublisher } = useMutation({
     mutationFn: (id) => deleteData(`/publishers/${id}`),
 

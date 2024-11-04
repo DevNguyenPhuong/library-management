@@ -143,6 +143,12 @@ export const monthlyData = [
   { month: "Apr", borrowed: 450, returned: 400 },
   { month: "May", borrowed: 500, returned: 470 },
   { month: "Jun", borrowed: 480, returned: 460 },
+  { month: "111", borrowed: 500, returned: 470 },
+  { month: "222", borrowed: 480, returned: 460 },
+  { month: "333", borrowed: 500, returned: 470 },
+  { month: "444", borrowed: 480, returned: 460 },
+  { month: "333", borrowed: 500, returned: 470 },
+  { month: "444", borrowed: 480, returned: 460 },
 ];
 
 export const COLORS = ["#FF6B6B", "#4ECDC4", "#45B7D1", "#FFA07A"];
