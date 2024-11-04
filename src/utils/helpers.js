@@ -34,3 +34,16 @@ export const getStatusAndColor = (status, dueDate) => {
     color: "blue",
   };
 };
+
+export const formatAmount = (amount) => {
+  if (amount == null) return "";
+  return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
+
+export const getPaymentStatusColor = (status) => {
+  const statusMap = {
+    PAID: "green",
+    PENDING: "gold",
+  };
+  return statusMap[status] || "blue";
+};

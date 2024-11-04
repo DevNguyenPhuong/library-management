@@ -8,6 +8,7 @@ import CreateLoanForm from "./CreateLoanForm";
 import PatronLoanTable from "./PatronLoanTable";
 import { HiArrowLeft } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
+import PatronFineTable from "./PatronFineTable";
 
 const Patron = () => {
   const navigate = useNavigate();
@@ -50,6 +51,15 @@ const Patron = () => {
               Loan history
             </h2>
             <PatronLoanTable />
+          </div>
+        </Col>
+
+        <Col xs={24} lg={24}>
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-6">
+              Fine history
+            </h2>
+            <PatronFineTable />
           </div>
         </Col>
       </Row>
