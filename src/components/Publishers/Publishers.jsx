@@ -54,7 +54,7 @@ function Publishers() {
       </Button>
       <PublishersTable />
       <Modal
-        title="Add New Category"
+        title="Add New Publisher"
         open={isModalVisible}
         onOk={onSubmit}
         onCancel={handleCancel}
