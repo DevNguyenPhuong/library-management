@@ -15,38 +15,52 @@ import { getAllData } from "../../services/apiLibrary";
 import { useQueries } from "@tanstack/react-query";
 
 const MonthlyBookActivityChart = () => {
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  const today = new Date();
+  let monthlyData = new Array(today.getMonth() + 1);
 
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const today = new Date()
-  let monthlyData = new Array((today.getMonth()) + 1)
-
-  for (var i = (today.getMonth()); i >= 0; i--) {
+  for (var i = today.getMonth(); i >= 0; i--) {
     monthlyData[i] = {
       month: `${months[i]}`,
-      numberOfMonth: `${i + 1}`
-    }
+      numberOfMonth: `${i + 1}`,
+    };
   }
 
   const loan = useQueries({
     queries: monthlyData.map((month) => {
       return {
-        queryFn: () => getAllData(`/loans/statistics?year=2024&month=${month.numberOfMonth}`),
-        queryKey: ['loan', month.numberOfMonth],
-      }
+        queryFn: () =>
+          getAllData(
+            `/loans/statistics?year=2024&month=${month.numberOfMonth}`
+          ),
+        queryKey: ["loan", month.numberOfMonth],
+      };
     }),
     combine: (result) => {
       return {
         data: result.map((result) => result.data),
         isLoading: result.some((result) => result.isPending),
-        error: result.some((result) => result.isError)
-      }
-    }
-  })
+        error: result.some((result) => result.isError),
+      };
+    },
+  });
 
   const monthlyDataStatistics = monthlyData.map((month, index) => {
-    return { ...month, ...loan.data[index] }
-  })
-
+    return { ...month, ...loan.data[index] };
+  });
 
   if (loan.isLoading) {
     return (
@@ -58,7 +72,6 @@ const MonthlyBookActivityChart = () => {
     );
   }
 
-
   if (loan.error) {
     return (
       <Card title="Monthly Book Activity" hoverable>
@@ -68,7 +81,6 @@ const MonthlyBookActivityChart = () => {
           subTitle="Sorry, there was an error loading the sample data."
         />
       </Card>
-
     );
   }
 
@@ -87,5 +99,5 @@ const MonthlyBookActivityChart = () => {
       </ResponsiveContainer>
     </Card>
   );
-}
+};
 export default MonthlyBookActivityChart;

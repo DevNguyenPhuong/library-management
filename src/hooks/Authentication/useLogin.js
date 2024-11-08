@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../store/userSlice";
 import { useNavigate } from "react-router-dom";
+
 export function useLogin() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -13,16 +14,51 @@ export function useLogin() {
     data,
   } = useMutation({
     mutationFn: (user) => loginAPI(user),
-    onSuccess: (response, payload) => {
-      localStorage.setItem("token", response?.result?.token);
-      localStorage.setItem("authenticated", response?.result?.authenticated);
-      localStorage.setItem("id", response?.result?.id);
-      localStorage.setItem("name", response?.result?.name);
-      dispatch(setUser({ ...response?.result }));
-      navigate("/dashboard");
+    onSuccess: (response) => {
+      const {
+        token,
+        authenticated,
+        id,
+        username,
+        name,
+        phone,
+        dob,
+        gender,
+        roles,
+        expiresIn,
+      } = response?.result;
+
+      localStorage.setItem("token", token);
+      localStorage.setItem("authenticated", String(authenticated));
+      localStorage.setItem("id", id);
+      localStorage.setItem("username", username || "");
+      localStorage.setItem("name", name || "");
+      localStorage.setItem("phone", phone || "");
+      localStorage.setItem("dob", dob?.toString() || "");
+      localStorage.setItem("gender", gender || "");
+      localStorage.setItem("roles", JSON.stringify(roles));
+      localStorage.setItem("expiresIn", String(expiresIn));
+
+      dispatch(
+        setUser({
+          token,
+          authenticated,
+          id,
+          username,
+          name,
+          phone,
+          dob,
+          gender,
+          roles,
+          expiresIn,
+        })
+      );
+
+      navigate(`/${roles[0]?.name?.toLowerCase()}`);
     },
     onError: (error) => {
       const { response } = error;
+      console.log(error);
       toast.error(response?.data.message || "Opps, cannot perform this action");
     },
   });

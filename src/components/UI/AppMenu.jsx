@@ -12,58 +12,87 @@ import {
 } from "react-icons/hi";
 import { useLocation, useNavigate } from "react-router-dom";
 
-export function SiderMenu() {
+const menuItems = {
+  LIBRARIAN: [
+    {
+      label: "Patrons",
+      key: "/librarian/patrons",
+      icon: <HiOutlineUser />,
+      index: 3,
+    },
+    {
+      label: "Books",
+      key: "/librarian/books",
+      icon: <HiOutlineBookOpen />,
+      index: 4,
+    },
+    {
+      label: "Authors",
+      key: "/librarian/authors",
+      icon: <HiOutlineUsers />,
+      index: 5,
+    },
+    {
+      label: "Categories",
+      key: "/librarian/categories",
+      icon: <HiOutlineTag />,
+      index: 6,
+    },
+    {
+      label: "Publishers",
+      key: "/librarian/publishers",
+      icon: <HiOutlineOfficeBuilding />,
+      index: 7,
+    },
+  ],
+
+  ADMIN: [
+    {
+      label: "Home",
+      key: "/admin/dashboard",
+      icon: <HiOutlineHome />,
+      index: 1,
+    },
+    {
+      label: "Users",
+      key: "/admin/users",
+      icon: <HiOutlineUserGroup />,
+      index: 2,
+    },
+  ],
+};
+
+export function SiderMenu({ roles }) {
   const navigate = useNavigate();
   const [selectedKey, setSelectedKey] = useState("/dashboard");
   const location = useLocation();
+  console.log(roles);
+
   useEffect(() => {
     setSelectedKey(location.pathname);
   }, [location.pathname]);
 
+  function combineRole(roles) {
+    const userRoleNames = roles.map((role) => role.name);
+    const combinedMenuItems = [];
+
+    userRoleNames.forEach((roleName) => {
+      if (menuItems[roleName]) {
+        combinedMenuItems.push(...menuItems[roleName]);
+      }
+    });
+
+    combinedMenuItems.sort((a, b) => a.index - b.index);
+
+    return combinedMenuItems;
+  }
   return (
     <Menu
       className="font-bold"
-      items={[
-        {
-          label: "Home",
-          key: "/dashboard",
-          icon: <HiOutlineHome />,
-        },
-        {
-          label: "Users",
-          key: "/users",
-          icon: <HiOutlineUserGroup />,
-        },
-
-        {
-          label: "Patrons",
-          key: "/patrons",
-          icon: <HiOutlineUser />,
-        },
-        {
-          label: "Books",
-          key: "/books",
-          icon: <HiOutlineBookOpen />,
-        },
-        {
-          label: "Categories",
-          key: "/categories",
-          icon: <HiOutlineTag />,
-        },
-        {
-          label: "Authors",
-          key: "/authors",
-          icon: <HiOutlineUsers />,
-        },
-        {
-          label: "Publishers",
-          key: "/publishers",
-          icon: <HiOutlineOfficeBuilding />,
-        },
-      ]}
-      theme={"dark"}
+      items={combineRole(roles)}
+      theme="dark"
       mode="inline"
-      selectedKeys={selectedKey}
+      selectedKeys={[selectedKey]}
       onClick={({ key }) => {
         navigate(key);
       }}
@@ -77,9 +106,7 @@ export function HeaderMenu() {
       theme={"dark"}
       className="flex-1 min-w-0 bg-transparent w-full  justify-end"
       mode="horizontal"
-      onClick={({ key }) => {
-        if (key === "/logout");
-      }}
+      onClick={({ key }) => {}}
       items={[
         {
           label: (

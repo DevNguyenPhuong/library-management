@@ -11,7 +11,7 @@ function Patrons() {
         className="mb-4"
         type="primary"
         icon={<HiPlus />}
-        onClick={() => navigate(`/addPatron`)}
+        onClick={() => navigate(`/librarian/addPatron`)}
       >
         New Patron
       </Button>

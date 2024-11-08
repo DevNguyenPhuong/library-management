@@ -100,7 +100,7 @@ export default function EditUser() {
           <Button
             type="primary"
             icon={<HiArrowLeft />}
-            onClick={() => navigate("/users")}
+            onClick={() => navigate("/admin/users")}
           >
             Back
           </Button>
@@ -112,7 +112,7 @@ export default function EditUser() {
         </div>
         <Form
           form={form}
-          name="book-create"
+          name="user-create"
           onFinish={onFinish}
           layout="vertical"
           className="p-6"
@@ -224,7 +224,7 @@ export default function EditUser() {
               size="large"
               className="px-8 rounded-md"
             >
-              Create user
+              Update user
             </Button>
           </Form.Item>
         </Form>

@@ -8,7 +8,7 @@ function Books() {
   return (
     <>
       <Button
-        onClick={() => navigate("/addBook")}
+        onClick={() => navigate("/librarian/addBook")}
         type="primary"
         icon={<HiOutlinePlus />}
       >

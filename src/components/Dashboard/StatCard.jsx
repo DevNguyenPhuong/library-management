@@ -1,9 +1,6 @@
-import React from "react";
-import { Card, Statistic, Spin, Result } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
-import { useQuery } from "@tanstack/react-query";
-import { getAllData } from "../../services/apiLibrary";
-
+import { Card, Result, Spin, Statistic } from "antd";
+import React from "react";
 
 const StatCard = ({ title, icon, color, status, value }) => {
   if (status?.isLoading) {
@@ -26,26 +23,26 @@ const StatCard = ({ title, icon, color, status, value }) => {
   }
 
   if (status?.error) {
-    return (    
+    return (
       <Card
-      hoverable
-      style={{ height: "100%" }}
-      styles={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100%",
-      }}
-    >
-      <Result
-        className="flex flex-col justify-center items-center h-40 p-2"
-        status="error"
-        title="Error"
-        subTitle="Sorry, there was an error loading the sample data."
-      />
+        hoverable
+        style={{ height: "100%" }}
+        styles={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100%",
+        }}
+      >
+        <Result
+          className="flex flex-col justify-center items-center h-40 p-2"
+          status="error"
+          title="Error"
+          subTitle="Sorry, there was an error loading the sample data."
+        />
       </Card>
-    )
+    );
   }
   return (
     <Card
@@ -64,9 +61,7 @@ const StatCard = ({ title, icon, color, status, value }) => {
       })}
       <Statistic title={title} value={value} valueStyle={{ color: color }} />
     </Card>
-
-
   );
-}
+};
 
 export default StatCard;

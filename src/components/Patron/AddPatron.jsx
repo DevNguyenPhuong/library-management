@@ -1,13 +1,12 @@
+import { BookOutlined } from "@ant-design/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Button, DatePicker, Form, Input, Select, Card, Row, Col } from "antd";
+import { Button, Card, Col, DatePicker, Form, Input, Row, Select } from "antd";
+import { format } from "date-fns";
 import React from "react";
 import { toast } from "react-hot-toast";
+import { HiArrowLeft } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 import { createData } from "../../services/apiLibrary";
-import { format } from "date-fns";
-import { IoMdArrowBack } from "react-icons/io";
-import { HiArrowLeft } from "react-icons/hi";
-import { BookOutlined } from "@ant-design/icons";
 
 const AddPatron = () => {
   const navigate = useNavigate();
@@ -45,7 +44,7 @@ const AddPatron = () => {
           <Button
             type="primary"
             icon={<HiArrowLeft />}
-            onClick={() => navigate("/patrons")}
+            onClick={() => navigate("/librarian/patrons")}
           >
             Back
           </Button>

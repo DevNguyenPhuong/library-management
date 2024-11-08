@@ -17,11 +17,11 @@ const BookCategoriesChart = () => {
   const {
     data: category,
     isLoading,
-    error
+    error,
   } = useQuery({
-    queryFn: () => getAllData('/categories/statistics'),
-    queryKey: ['categories']
-  })
+    queryFn: () => getAllData("/categories/statistics"),
+    queryKey: ["categories"],
+  });
 
   if (isLoading) {
     return (
@@ -30,7 +30,6 @@ const BookCategoriesChart = () => {
           <Spin indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
         </div>
       </Card>
-
     );
   }
 
@@ -43,7 +42,7 @@ const BookCategoriesChart = () => {
           subTitle="Sorry, there was an error loading the sample data."
         />
       </Card>
-    )
+    );
   }
 
   return (
@@ -64,7 +63,10 @@ const BookCategoriesChart = () => {
               }
             >
               {category.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                <Cell
+                  key={`cell-${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                />
               ))}
             </Pie>
             <Tooltip />
@@ -73,7 +75,7 @@ const BookCategoriesChart = () => {
         </ResponsiveContainer>
       </Card>
     </>
-  )
+  );
 };
 
 export default BookCategoriesChart;

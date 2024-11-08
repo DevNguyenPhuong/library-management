@@ -1,68 +1,67 @@
 import {
   BookOutlined,
   ClockCircleOutlined,
-  LoadingOutlined,
   ReadOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
-import { Col, Layout, Result, Row, Spin } from "antd";
+import { Col, Layout, Row } from "antd";
 import React, { useEffect, useState } from "react";
 import { getAllData } from "../../services/apiLibrary";
 import BookCategoriesChart from "./BookCategoriesChart";
 import LibraryUtilization from "./LibraryUtilization";
 import MonthlyBookActivityChart from "./MonthlyBookActivityChart";
 import StatCard from "./StatCard";
-import { borrowedBooks } from "../../data/fakeData";
 
 const { Content } = Layout;
 
 export default function Dashboard() {
   const [statusQueryBook, setStatusQueryBook] = useState({
-    isLoading: true, error: ''
-  })
+    isLoading: true,
+    error: "",
+  });
 
   const [statusQueryPatron, setStatusQueryPatron] = useState({
-    isLoading: true, error: ''
-  })
+    isLoading: true,
+    error: "",
+  });
 
-  const { data: totalBooks,
+  const {
+    data: totalBooks,
     isLoading: isLoadingBooks,
-    error: errorBooks
+    error: errorBooks,
   } = useQuery({
     queryFn: () => getAllData(`/book-copies`),
     queryKey: [`book-copies`],
-  })
+  });
 
   const {
     data: patrons,
     isLoading: isLoadingPatrons,
-    error: errorPatrons
+    error: errorPatrons,
   } = useQuery({
     queryFn: () => getAllData(`/patrons`),
-    queryKey: ['patrons']
-  })
+    queryKey: ["patrons"],
+  });
 
   useEffect(() => {
-    setStatusQueryBook({ isLoading: isLoadingBooks, error: errorBooks })
-
-  }, [isLoadingBooks])
+    setStatusQueryBook({ isLoading: isLoadingBooks, error: errorBooks });
+  }, [isLoadingBooks, errorBooks]);
 
   useEffect(() => {
-    setStatusQueryPatron({ isLoading: isLoadingPatrons, error: errorPatrons })
-  }, [isLoadingPatrons])
-
+    setStatusQueryPatron({ isLoading: isLoadingPatrons, error: errorPatrons });
+  }, [isLoadingPatrons, errorPatrons]);
 
   const borrowedBooks = totalBooks?.filter((book) => {
-    return book.status === 'BORROWED'
-  })
+    return book.status === "BORROWED";
+  });
 
   const overdueBooks = totalBooks?.filter((book) => {
-    return book.status === 'OVERDUE'
-  })
+    return book.status === "OVERDUE";
+  });
   const activePatrons = patrons?.content.filter((patron) => {
-    return patron.status === 'ACTIVE'
-  })
+    return patron.status === "ACTIVE";
+  });
 
   return (
     <Layout className="min-h-screen bg-zinc-200">

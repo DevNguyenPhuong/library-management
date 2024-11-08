@@ -19,7 +19,6 @@ import PageNotFound from "./pages/PageNotFound";
 import PatronPage from "./pages/PatronPage.jsx";
 import PatronsPage from "./pages/PatronsPage.jsx";
 import PublishersPage from "./pages/PublishersPage.jsx";
-import RolesPage from "./pages/RolesPage.jsx";
 import UsersPage from "./pages/UsersPage.jsx";
 
 const queryClient = new QueryClient({
@@ -46,27 +45,41 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route
+              path="librarian"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute requiredRoles={"LIBRARIAN"}>
+                  <AppLayout />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<Navigate replace to="patrons" />} />
+
+              <Route path="patrons" element={<PatronsPage />} />
+              <Route path="patrons/:patronID" element={<PatronPage />} />
+              <Route path="addPatron" element={<AddPatron />} />
+
+              <Route path="books" element={<BooksPage />} />
+              <Route path="addBook" element={<AddBook />} />
+              <Route path="books/:bookId" element={<BookPage />} />
+
+              <Route path="authors" element={<AuthorsPage />} />
+              <Route path="categories" element={<CategoriesPage />} />
+              <Route path="publishers" element={<PublishersPage />} />
+            </Route>
+
+            <Route
+              path="admin"
+              element={
+                <ProtectedRoute requiredRoles={"ADMIN"}>
                   <AppLayout />
                 </ProtectedRoute>
               }
             >
               <Route index element={<Navigate replace to="dashboard" />} />
               <Route path="dashboard" element={<DashboardPage />} />
-              <Route path="patrons" element={<PatronsPage />} />
-              <Route path="patrons/:patronID" element={<PatronPage />} />
-              <Route path="books" element={<BooksPage />} />
-              <Route path="addBook" element={<AddBook />} />
-              <Route path="books/:bookId" element={<BookPage />} />
-              <Route path="authors" element={<AuthorsPage />} />
-              <Route path="categories" element={<CategoriesPage />} />
-              <Route path="publishers" element={<PublishersPage />} />
-              <Route path="roles" element={<RolesPage />} />
               <Route path="users" element={<UsersPage />} />
               <Route path="users/:userId" element={<EditUser />} />
               <Route path="addUser" element={<AddUser />} />
-              <Route path="addPatron" element={<AddPatron />} />
             </Route>
 
             <Route path="login" element={<LoginPage />} />

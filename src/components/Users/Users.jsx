@@ -10,7 +10,7 @@ function Users() {
       <Button
         type="primary"
         icon={<HiPlus />}
-        onClick={() => navigate("/addUser")}
+        onClick={() => navigate("/admin/addUser")}
       >
         Add user
       </Button>

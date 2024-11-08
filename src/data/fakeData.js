@@ -136,7 +136,7 @@ export const categoryData = [
   { name: "History", value: 500 },
 ];
 
-export const monthlyData = [
+export const FakemonthlyData = [
   { month: "Jan", borrowed: 320, returned: 280 },
   { month: "Feb", borrowed: 350, returned: 300 },
   { month: "Mar", borrowed: 400, returned: 380 },

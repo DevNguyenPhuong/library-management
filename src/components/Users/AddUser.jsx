@@ -90,7 +90,7 @@ export default function AddUser() {
           <Button
             type="primary"
             icon={<HiArrowLeft />}
-            onClick={() => navigate("/users")}
+            onClick={() => navigate("/admin/users")}
           >
             Back
           </Button>

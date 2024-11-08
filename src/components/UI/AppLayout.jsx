@@ -1,12 +1,13 @@
 import { Layout } from "antd";
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
 import { HeaderMenu, SiderMenu } from "./AppMenu";
 const { Header, Content, Sider } = Layout;
 
 function AppLayout() {
+  const { roles } = useSelector((store) => store.user);
   const [collapsed, setCollapsed] = useState(false);
-
   const layoutConfig = {
     true: "ml-[80px] transition-ml duration-300 ",
     false: "ml-[200px] transition-ml duration-300 ",
@@ -22,7 +23,7 @@ function AppLayout() {
         onCollapse={(value) => setCollapsed(value)}
       >
         <div className=" h-16 flex items-center justify-center font-bold text-slate-300"></div>
-        <SiderMenu />
+        <SiderMenu roles={roles} />
       </Sider>
 
       <Layout className={`${layoutConfig[collapsed]}`}>
