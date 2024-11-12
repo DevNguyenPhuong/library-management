@@ -82,6 +82,7 @@ function App() {
               <Route path="addUser" element={<AddUser />} />
             </Route>
 
+            <Route index element={<Navigate replace to="login" />} />
             <Route path="login" element={<LoginPage />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>

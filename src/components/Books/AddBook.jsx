@@ -1,27 +1,46 @@
-import { BookOutlined } from "@ant-design/icons";
+import { BookOutlined, PlusOutlined } from "@ant-design/icons";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Button,
   Card,
   Col,
   Form,
+  Image,
   Input,
   InputNumber,
   Result,
   Row,
   Select,
   Spin,
+  Upload,
 } from "antd";
-import React from "react";
+import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { HiArrowLeft } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 import { createData, getAllData } from "../../services/apiLibrary";
+import { getBase64 } from "../../utils/helpers";
 
 export default function AddBook() {
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [fileList, setFileList] = useState([]);
+
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewOpen(true);
+  };
+
+  const handleChange = ({ fileList: newFileList }) => {
+    const lastFile = newFileList.slice(-1); // Keep only the last file
+    setFileList(lastFile);
+  };
 
   const {
     data: categories,
@@ -51,7 +70,7 @@ export default function AddBook() {
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: (book) => createData(`/books`, book),
+    mutationFn: ({ data, type }) => createData(`/books`, data, type),
 
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -59,6 +78,7 @@ export default function AddBook() {
       });
       toast.success("Add Success");
       form.resetFields();
+      navigate("/librarian/books");
     },
     onError: (error) => {
       const { response } = error;
@@ -99,7 +119,20 @@ export default function AddBook() {
   }
 
   const onFinish = (values) => {
-    mutate(values);
+    const imageFile = fileList[0]?.originFileObj;
+    if (imageFile) {
+      // If there's an image, create FormData
+      const formData = new FormData();
+      formData.append("image", imageFile);
+
+      for (let [key, value] of formData.entries()) {
+        console.log(`${key}:`, value);
+      }
+
+      mutate({ data: values, image: formData, type: "IMAGE" });
+    } else {
+      mutate({ data: values });
+    }
   };
 
   return (
@@ -290,6 +323,40 @@ export default function AddBook() {
             </Col>
           </Row>
 
+          <Row gutter={24}>
+            <Col xs={24} md={8}>
+              <Form.Item name="image" label="Book Image">
+                <Upload
+                  listType="picture-card"
+                  fileList={fileList}
+                  onPreview={handlePreview}
+                  onChange={handleChange}
+                  beforeUpload={() => false}
+                  maxCount={1}
+                >
+                  {fileList.length === 0 && ( // Only show upload button when no files
+                    <button className="bg-none border-0" type="button">
+                      <PlusOutlined />
+                      <div className="mt-2">Upload</div>
+                    </button>
+                  )}
+                </Upload>
+
+                {previewImage && (
+                  <Image
+                    className="hidden"
+                    preview={{
+                      visible: previewOpen,
+                      onVisibleChange: (visible) => setPreviewOpen(visible),
+                      afterOpenChange: (visible) =>
+                        !visible && setPreviewImage(""),
+                    }}
+                    src={previewImage}
+                  />
+                )}
+              </Form.Item>
+            </Col>
+          </Row>
           <Form.Item className="text-center mt-8">
             <Button
               loading={isPending}

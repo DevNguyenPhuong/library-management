@@ -14,7 +14,7 @@ function Books() {
       >
         New book
       </Button>
-      <BooksTable></BooksTable>
+      <BooksTable />
     </>
   );
 }

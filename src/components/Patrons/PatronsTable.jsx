@@ -36,7 +36,7 @@ export default function BooksTable() {
   });
 
   const handleDetail = (id) => {
-    navigate(`/patrons/${id}`);
+    navigate(`/librarian/patrons/${id}`);
   };
 
   const handleDelete = (id) => {

@@ -23,7 +23,7 @@ const userSlice = createSlice({
         ...action.payload,
       };
     },
-    logout(state) {
+    clearData(state) {
       return {
         ...initialState,
       };
@@ -31,6 +31,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { setUser, logout } = userSlice.actions;
+export const { setUser, clearData } = userSlice.actions;
 
 export default userSlice.reducer;

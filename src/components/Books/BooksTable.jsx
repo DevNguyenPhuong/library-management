@@ -1,4 +1,4 @@
-import { Button, Space, Tooltip } from "antd";
+import { Button, Popconfirm, Space, Tooltip } from "antd";
 import { getAllData, deleteData } from "../../services/apiLibrary";
 import { BOOK_PAGE_SIZE } from "../../utils/constants";
 import { ReusableDataTable } from "../UI/Table/ReuseableDataTable";
@@ -36,7 +36,7 @@ export default function BooksTable() {
   });
 
   const handleDetail = (id) => {
-    navigate(`/books/${id}`);
+    navigate(`/librarian/books/${id}`);
   };
 
   const handleDelete = (id) => {
@@ -84,14 +84,23 @@ export default function BooksTable() {
                   onClick={() => handleDetail(book.id)}
                 />
               </Tooltip>
-              <Tooltip title="Delete">
-                <Button
-                  type="primary"
-                  danger
-                  icon={<DeleteOutlined />}
-                  onClick={() => handleDelete(book.id)}
-                />
-              </Tooltip>
+
+              <Popconfirm
+                title="Delete this book"
+                description="Are you sure you want delete this book?"
+                onConfirm={() => handleDelete(book.id)}
+                okText="Yes"
+                cancelText="No"
+              >
+                <Tooltip placement="bottom" title="Delete">
+                  <Button
+                    type="primary"
+                    danger
+                    icon={<DeleteOutlined />}
+                    aria-label="Delete copy"
+                  />
+                </Tooltip>
+              </Popconfirm>
             </Space>
           )}
           {![

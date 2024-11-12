@@ -124,7 +124,7 @@ export default function UpdateBook() {
           <Button
             type="primary"
             icon={<HiArrowLeft />}
-            onClick={() => navigate("/books")}
+            onClick={() => navigate("/librarian/books")}
           >
             Back
           </Button>

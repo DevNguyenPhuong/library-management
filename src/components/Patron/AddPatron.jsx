@@ -19,7 +19,7 @@ const AddPatron = () => {
         queryKey: [`patrons`],
       });
       toast.success("Add Success");
-      navigate(`/patrons`);
+      navigate(`/librarian/patrons`);
     },
     onError: (error) => {
       const { response } = error;

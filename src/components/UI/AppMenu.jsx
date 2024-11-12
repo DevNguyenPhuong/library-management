@@ -11,6 +11,8 @@ import {
   HiOutlineUsers,
 } from "react-icons/hi";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useLogout } from "../../hooks/Authentication/useLogout";
+import { useSelector } from "react-redux";
 
 const menuItems = {
   LIBRARIAN: [
@@ -101,12 +103,25 @@ export function SiderMenu({ roles }) {
 }
 
 export function HeaderMenu() {
+  const { logout } = useLogout();
+  const jwt = useSelector((store) => {
+    const storeJwt = store.user.token;
+
+    return storeJwt && storeJwt !== ""
+      ? storeJwt
+      : localStorage.getItem("token");
+  });
+
   return (
     <Menu
       theme={"dark"}
       className="flex-1 min-w-0 bg-transparent w-full  justify-end"
       mode="horizontal"
-      onClick={({ key }) => {}}
+      onClick={({ key }) => {
+        if (key === "/logout") {
+          logout(jwt);
+        }
+      }}
       items={[
         {
           label: (

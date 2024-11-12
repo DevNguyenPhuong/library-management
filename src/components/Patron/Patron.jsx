@@ -29,7 +29,7 @@ const Patron = () => {
           <Button
             type="primary"
             icon={<HiArrowLeft />}
-            onClick={() => navigate("/patrons")}
+            onClick={() => navigate("/librarian/patrons")}
           >
             Back
           </Button>

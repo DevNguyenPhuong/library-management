@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined, UserOutlined } from "@ant-design/icons";
-import { Avatar, Button, Card, Tooltip, Typography } from "antd";
+import { Avatar, Button, Card, Popconfirm, Tooltip, Typography } from "antd";
 const { Text, Title } = Typography;
 
 function UserItem({ user, onEdit, onDelete }) {
@@ -50,14 +50,23 @@ function UserItem({ user, onEdit, onDelete }) {
               className="text-blue-400 hover:text-blue-300 hover:bg-blue-900/20"
             />
           </Tooltip>
-          <Tooltip title="Delete User">
-            <Button
-              type="text"
-              icon={<DeleteOutlined />}
-              onClick={() => onDelete(user.id)}
-              className="text-red-400 hover:text-red-300 hover:bg-red-900/20"
-            />
-          </Tooltip>
+
+          <Popconfirm
+            title="Delete this user"
+            description="Are you sure you want delete this user?"
+            onConfirm={() => onDelete(user.id)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Tooltip placement="bottom" title="Delete">
+              <Button
+                type="text"
+                icon={<DeleteOutlined />}
+                className="text-red-400 hover:text-red-300 hover:bg-red-900/20"
+                aria-label="Delete copy"
+              />
+            </Tooltip>
+          </Popconfirm>
         </div>
       </div>
     </Card>

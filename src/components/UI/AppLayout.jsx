@@ -6,7 +6,13 @@ import { HeaderMenu, SiderMenu } from "./AppMenu";
 const { Header, Content, Sider } = Layout;
 
 function AppLayout() {
-  const { roles } = useSelector((store) => store.user);
+  const roles = useSelector((store) => {
+    const rolesFromStore = store.user.authenticated.roles;
+    return rolesFromStore && rolesFromStore.length > 0
+      ? rolesFromStore
+      : JSON.parse(localStorage.getItem("roles")) || [];
+  });
+
   const [collapsed, setCollapsed] = useState(false);
   const layoutConfig = {
     true: "ml-[80px] transition-ml duration-300 ",

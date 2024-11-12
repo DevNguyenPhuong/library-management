@@ -1,10 +1,32 @@
+import { isAction } from "@reduxjs/toolkit";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 function ProtectedRoute({ children, requiredRoles }) {
   const navigate = useNavigate();
-  const { authenticated, roles } = useSelector((store) => store.user);
+
+  const authenticatedFromLocalStorage = JSON.parse(
+    localStorage.getItem("authenticated")
+  );
+  const authenticatedFromStore = useSelector(
+    (store) => store.user.authenticated
+  );
+
+  const authenticated =
+    authenticatedFromLocalStorage !== null
+      ? authenticatedFromLocalStorage
+      : authenticatedFromStore;
+
+  const roles = useSelector((store) => {
+    const rolesFromStore = store.user.authenticated.roles;
+    return rolesFromStore && rolesFromStore.length > 0
+      ? rolesFromStore
+      : JSON.parse(localStorage.getItem("roles")) || [];
+  });
+
+  console.log(roles);
+  console.log(authenticated);
 
   useEffect(() => {
     if (!authenticated) {

@@ -1,6 +1,6 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Button, Form, Modal, Select, Space, Tooltip } from "antd";
+import { Button, Form, Modal, Popconfirm, Select, Space, Tooltip } from "antd";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
@@ -51,7 +51,7 @@ function BookCopiesTable() {
     { header: "Actions", accessor: "actions" },
   ];
 
-  const { mutate: deleteBookCopied } = useMutation({
+  const { mutate: deleteBookCopied, isPending: isDeleting } = useMutation({
     mutationFn: (id) => deleteData(`/book-copies/${id}`),
 
     onSuccess: () => {
@@ -94,14 +94,25 @@ function BookCopiesTable() {
                   onClick={() => handleDetail(bookCopied)}
                 />
               </Tooltip>
-              <Tooltip title="Delete">
-                <Button
-                  type="primary"
-                  danger
-                  icon={<DeleteOutlined />}
-                  onClick={() => handleDelete(bookCopied.id)}
-                />
-              </Tooltip>
+
+              <Popconfirm
+                title="Delete this copy"
+                description="Are you sure you want delete this copy?"
+                onConfirm={() => handleDelete(bookCopied.id)}
+                okText="Yes"
+                cancelText="No"
+              >
+                <Tooltip placement="bottom" title="Delete">
+                  <Button
+                    type="primary"
+                    danger
+                    disabled={isDeleting}
+                    icon={<DeleteOutlined />}
+                    className="text-red-500 hover:text-red-600"
+                    aria-label="Delete copy"
+                  />
+                </Tooltip>
+              </Popconfirm>
             </Space>
           )}
           {!["actions"].includes(column.accessor) &&

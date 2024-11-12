@@ -7,7 +7,15 @@ export async function getAllData(url) {
   return data?.result;
 }
 
-export async function createData(url, data) {
+export async function createData(url, data, type) {
+  if (type === "IMAGE") {
+    await axios.post(url, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return;
+  }
   await axios.post(url, data);
 }
 

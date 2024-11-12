@@ -5,12 +5,8 @@ const api = axios.create({
   withCredentials: true,
 });
 
-const publicRoutes = [
-  "/auth/token",
-  "/auth/introspect",
-  "/auth/logout",
-  "/auth/refresh",
-];
+//  "/auth/logout",
+const publicRoutes = ["/auth/token", "/auth/introspect", "/auth/refresh"];
 
 api.interceptors.request.use(
   (config) => {
