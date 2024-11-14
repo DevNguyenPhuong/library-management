@@ -112,6 +112,14 @@ export function HeaderMenu() {
       : localStorage.getItem("token");
   });
 
+  const name = useSelector((store) => {
+    const storeName = store.user.name;
+
+    return storeName && storeName !== ""
+      ? storeName
+      : localStorage.getItem("name");
+  });
+
   return (
     <Menu
       theme={"dark"}
@@ -127,7 +135,7 @@ export function HeaderMenu() {
           label: (
             <div className="flex justify-center items-center gap-3">
               <Avatar className="bg-zinc-300" size={32} icon={<FaUser />} />
-              <span>{"anonymous"}</span>
+              <span>{name===''? 'anonymous': name}</span>
             </div>
           ),
           key: "avatar",
