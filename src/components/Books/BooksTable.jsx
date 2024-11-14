@@ -60,14 +60,16 @@ export default function BooksTable() {
             />
           )}
           {column.accessor === "authors" && (
-            <span>{book.authors.map((author) => author.name).join(", ")}</span>
+            <span>
+              {book?.authors?.map((author) => author.name).join(", ")}
+            </span>
           )}
           {column.accessor === "publisher" && (
-            <span>{book.publisher.name}</span>
+            <span>{book?.publisher?.name}</span>
           )}
           {column.accessor === "categories" && (
             <span>
-              {book.categories.map((category) => category.name).join(", ")}
+              {book?.categories?.map((category) => category.name).join(", ")}
             </span>
           )}
           {column.accessor === "price" && (

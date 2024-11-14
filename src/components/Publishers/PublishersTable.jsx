@@ -1,31 +1,27 @@
-import { LoadingOutlined } from "@ant-design/icons";
+import { LoadingOutlined, SearchOutlined } from "@ant-design/icons";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Form, Input, Modal, Result, Spin, Table } from "antd";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "react-hot-toast";
 import { deleteData, getAllData, updateData } from "../../services/apiLibrary";
-import { PAGE_SIZE } from "../../utils/constants";
-import { preparePublishersTableData } from "../Table/tableUtils";
-import publishersCols from "./publishersCols";
+import { MED_PAGE_SIZE } from "../../utils/constants";
+import { AuthorsTableColumns } from "../Authors/AuthorsTableColumns";
+import { PublihserTableColumns } from "./PublisherTableColumns";
 
 const PublishersTable = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
   const { TextArea } = Input;
+  const [searchText, setSearchText] = useState("");
 
   const queryClient = useQueryClient();
 
-  const {
-    data: samples,
-    isLoading,
-    error,
-  } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryFn: () => getAllData(`/publishers`),
     queryKey: ["publishers"],
-    select: (data) => data.sort((a, b) => a.name.localeCompare(b.name)),
   });
 
-  const { mutate: updatePublisher, isPending } = useMutation({
+  const { mutate: updatePublisher, isPendingUpdate } = useMutation({
     mutationFn: (publisher) =>
       updateData(`/publishers/${publisher.id}`, publisher),
 
@@ -42,8 +38,7 @@ const PublishersTable = () => {
     },
   });
 
-
-  const { mutate: deletePublisher } = useMutation({
+  const { mutate: deletePublisher, isPending: isPendingDelete } = useMutation({
     mutationFn: (id) => deleteData(`/publishers/${id}`),
 
     onSuccess: () => {
@@ -58,6 +53,13 @@ const PublishersTable = () => {
       toast.error(response?.data.message || "Opps, cannot perform this action");
     },
   });
+
+  const filteredData = useMemo(() => {
+    if (!data) return [];
+    return data.filter((item) =>
+      item.name.toLowerCase().includes(searchText.toLowerCase())
+    );
+  }, [data, searchText]);
 
   if (isLoading) {
     return (
@@ -99,27 +101,30 @@ const PublishersTable = () => {
     deletePublisher(id);
   };
 
-  const columns = publishersCols(handleEdit, handleDelete);
-  const emptyRowsCount = Math.max(0, PAGE_SIZE - (samples?.length % PAGE_SIZE));
+  const columns = PublihserTableColumns({
+    handleDelete,
+    handleEdit,
+    isLoading: isPendingDelete || isPendingUpdate,
+  });
 
-  const dataWithEmptyRows = preparePublishersTableData(samples, emptyRowsCount);
   return (
     <>
+      <div className="mb-4 flex items-center">
+        <Input
+          placeholder="Search by name"
+          prefix={<SearchOutlined className="text-gray-400" />}
+          onChange={(e) => setSearchText(e.target.value)}
+          className="w-full max-w-md mr-4"
+        />
+      </div>
       <Table
-        className="shadow-lg rounded-lg"
         columns={columns}
-        dataSource={
-          samples?.length === 0
-            ? []
-            : samples?.length % PAGE_SIZE === 0
-            ? samples
-            : dataWithEmptyRows
-        }
+        dataSource={filteredData}
         rowKey="id"
         pagination={{
-          pageSize: PAGE_SIZE,
+          pageSize: MED_PAGE_SIZE,
         }}
-        bordered
+        className="shadow-sm"
       />
       <Modal
         title="Update Publisher"
@@ -140,7 +145,7 @@ const PublishersTable = () => {
               placeholder="Tell somethings about this publisher"
               showCount
               maxLength={400}
-              disabled={isPending}
+              disabled={isPendingUpdate}
               rows={5}
             />
           </Form.Item>

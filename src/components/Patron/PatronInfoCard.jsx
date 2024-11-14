@@ -175,6 +175,15 @@ const PatronInfoCard = ({ calculateAge }) => {
           <Descriptions.Item
             label={
               <>
+                <BookOutlined /> Deposit:
+              </>
+            }
+          >
+            {(data.deposit || 0).toLocaleString("en-US")} (VNĐ)
+          </Descriptions.Item>
+          <Descriptions.Item
+            label={
+              <>
                 <CalendarOutlined /> Membership Date
               </>
             }

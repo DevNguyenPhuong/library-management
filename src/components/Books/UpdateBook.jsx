@@ -142,9 +142,9 @@ export default function UpdateBook() {
           className="p-6"
           initialValues={{
             ...book,
-            publisher: book.publisher.id,
-            authors: book.authors.map((author) => author.id),
-            categories: book.categories.map((category) => category.id),
+            publisher: book?.publisher?.id,
+            authors: book?.authors?.map((author) => author.id),
+            categories: book?.categories?.map((category) => category.id),
           }}
         >
           <Row gutter={24}>

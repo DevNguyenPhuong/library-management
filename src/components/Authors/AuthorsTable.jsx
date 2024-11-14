@@ -1,30 +1,25 @@
-import { LoadingOutlined } from "@ant-design/icons";
+import { LoadingOutlined, SearchOutlined } from "@ant-design/icons";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Form, Input, Modal, Result, Spin, Table } from "antd";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "react-hot-toast";
 import { deleteData, getAllData, updateData } from "../../services/apiLibrary";
-import { PAGE_SIZE } from "../../utils/constants";
-import { prepareAuthorsTableData } from "../Table/tableUtils";
-import authorsCols from "./authorsCols";
+import { MED_PAGE_SIZE } from "../../utils/constants";
+import { AuthorsTableColumns } from "./AuthorsTableColumns";
 
 const AuthorsTable = () => {
   const queryClient = useQueryClient();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
   const { TextArea } = Input;
+  const [searchText, setSearchText] = useState("");
 
-  const {
-    data: samples,
-    isLoading,
-    error,
-  } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryFn: () => getAllData(`/authors`),
     queryKey: ["authors"],
-    select: (data) => data.sort((a, b) => a.name.localeCompare(b.name)),
   });
 
-  const { mutate: updateAuthor, isPending } = useMutation({
+  const { mutate: updateAuthor, isPendingUpdate } = useMutation({
     mutationFn: (author) => updateData(`/authors/${author.id}`, author),
 
     onSuccess: () => {
@@ -40,7 +35,7 @@ const AuthorsTable = () => {
     },
   });
 
-  const { mutate: deleteAuthor } = useMutation({
+  const { mutate: deleteAuthor, isPending: isPendingDelete } = useMutation({
     mutationFn: (id) => deleteData(`/authors/${id}`),
 
     onSuccess: () => {
@@ -54,6 +49,13 @@ const AuthorsTable = () => {
       toast.error(response?.data.message || "Opps, cannot perform this action");
     },
   });
+
+  const filteredData = useMemo(() => {
+    if (!data) return [];
+    return data.filter((item) =>
+      item.name.toLowerCase().includes(searchText.toLowerCase())
+    );
+  }, [data, searchText]);
 
   if (isLoading) {
     return (
@@ -97,27 +99,30 @@ const AuthorsTable = () => {
     deleteAuthor(id);
   };
 
-  const columns = authorsCols(handleEdit, handleDelete);
-  const emptyRowsCount = Math.max(0, PAGE_SIZE - (samples?.length % PAGE_SIZE));
+  const columns = AuthorsTableColumns({
+    handleDelete,
+    handleEdit,
+    isLoading: isPendingDelete || isPendingUpdate,
+  });
 
-  const dataWithEmptyRows = prepareAuthorsTableData(samples, emptyRowsCount);
   return (
     <>
+      <div className="mb-4 flex items-center">
+        <Input
+          placeholder="Search by name"
+          prefix={<SearchOutlined className="text-gray-400" />}
+          onChange={(e) => setSearchText(e.target.value)}
+          className="w-full max-w-md mr-4"
+        />
+      </div>
       <Table
-        className="shadow-lg rounded-lg"
         columns={columns}
-        dataSource={
-          samples?.length === 0
-            ? []
-            : samples?.length % PAGE_SIZE === 0
-            ? samples
-            : dataWithEmptyRows
-        }
+        dataSource={filteredData}
         rowKey="id"
         pagination={{
-          pageSize: PAGE_SIZE,
+          pageSize: MED_PAGE_SIZE,
         }}
-        bordered
+        className="shadow-sm"
       />
       <Modal
         title="Add New Author"
@@ -138,7 +143,7 @@ const AuthorsTable = () => {
               placeholder="Tell somethings about this author"
               showCount
               maxLength={400}
-              disabled={isPending}
+              disabled={isPendingUpdate}
               rows={5}
             />
           </Form.Item>

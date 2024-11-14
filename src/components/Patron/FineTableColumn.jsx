@@ -79,7 +79,7 @@ export const getFineTableColumns = ({ deleteFine, updateFine, isLoading }) => [
         )}
 
         <Popconfirm
-          title="Pay this Fine"
+          title="Delete this Fine"
           description="Are you sure you want delete this fine?"
           onConfirm={() => deleteFine(record?.id)}
           okText="Yes"

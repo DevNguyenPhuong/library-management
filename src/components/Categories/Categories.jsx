@@ -37,8 +37,9 @@ function Categories() {
       form.resetFields();
     },
     onError: (error) => {
-      const { respone } = error;
-      toast.error(respone?.data.message || "Opps, cannot perform this action");
+      const { response } = error;
+      console.log(error);
+      toast.error(response?.data.message || "Opps, cannot perform this action");
       form.resetFields();
     },
   });

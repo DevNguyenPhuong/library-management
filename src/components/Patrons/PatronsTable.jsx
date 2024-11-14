@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Button, Space, Tooltip } from "antd";
+import { Button, Popconfirm, Space, Tooltip } from "antd";
 import { deleteData, getAllData } from "../../services/apiLibrary";
 import { PATRON_PAGE_SIZE } from "../../utils/constants";
 import { ReusableDataTable } from "../UI/Table/ReuseableDataTable";
@@ -52,21 +52,30 @@ export default function BooksTable() {
         >
           {column.accessor === "actions" && (
             <Space size="middle">
-              <Tooltip title="Edit">
+              <Tooltip title="Details">
                 <Button
                   type="primary"
                   icon={<EditOutlined />}
                   onClick={() => handleDetail(patron.id)}
                 />
               </Tooltip>
-              <Tooltip title="Delete">
-                <Button
-                  type="primary"
-                  danger
-                  icon={<DeleteOutlined />}
-                  onClick={() => handleDelete(patron.id)}
-                />
-              </Tooltip>
+
+              <Popconfirm
+                title="Delete this patron"
+                description="Are you sure you want delete this patron?"
+                onConfirm={() => handleDelete(patron.id)}
+                okText="Yes"
+                cancelText="No"
+              >
+                <Tooltip placement="bottom" title="Delete">
+                  <Button
+                    type="primary"
+                    danger
+                    icon={<DeleteOutlined />}
+                    aria-label="Delete patron"
+                  />
+                </Tooltip>
+              </Popconfirm>
             </Space>
           )}
           {!["actions"].includes(column.accessor) && patron[column.accessor]}

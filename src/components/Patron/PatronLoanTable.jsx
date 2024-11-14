@@ -58,8 +58,8 @@ export default function PatronLoanTable() {
     if (!data) return [];
     return data.filter(
       (item) =>
-        item.bookCopy.title.toLowerCase().includes(searchText.toLowerCase()) ||
-        item.patron.name.toLowerCase().includes(searchText.toLowerCase())
+        item.bookCopy.title.toLowerCase().includes(searchText.toLowerCase())
+      //  ||item.patron.name.toLowerCase().includes(searchText.toLowerCase())
     );
   }, [data, searchText]);
 
@@ -115,7 +115,7 @@ export default function PatronLoanTable() {
     <>
       <div className="mb-4">
         <Input
-          placeholder="Search by book title or patron name"
+          placeholder="Search by book title"
           prefix={<SearchOutlined className="text-gray-400" />}
           onChange={(e) => setSearchText(e.target.value)}
           className="w-full max-w-md"

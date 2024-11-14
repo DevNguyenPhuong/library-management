@@ -102,7 +102,7 @@ function PatronFineTable() {
     <>
       <div className="mb-4 flex items-center">
         <Input
-          placeholder="Search by loan or payment status"
+          placeholder="Search by loan"
           prefix={<SearchOutlined className="text-gray-400" />}
           onChange={(e) => setSearchText(e.target.value)}
           className="w-full max-w-md mr-4"

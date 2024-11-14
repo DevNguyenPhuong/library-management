@@ -42,7 +42,8 @@ function CreateFineModal({ open, loan, onChangeModalVisible }) {
           0,
           dayjs().diff(dayjs(loan?.dueDate), "day")
         );
-        const overdueFine = overdueDays * 1000;
+        let overdueFine = overdueDays * 1000;
+        if (overdueFine >= 150000) overdueFine = 150000;
         setTotalFine(overdueFine);
         form.setFieldsValue({ overdueFine, paymentStatus: "PAID" });
       } else {
@@ -153,7 +154,7 @@ function CreateFineModal({ open, loan, onChangeModalVisible }) {
         </Form.Item>
         <Form.Item
           name="reason"
-          label="Reason for Other Fine"
+          label="Reason for other Fine"
           rules={[
             ({ getFieldValue }) => ({
               required: !!getFieldValue("otherFine"),

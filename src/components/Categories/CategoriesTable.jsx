@@ -1,33 +1,28 @@
-import { useState } from "react";
-import { LoadingOutlined } from "@ant-design/icons";
-import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
-import { Result, Spin, Table, Form, Modal, Input } from "antd";
-import { getAllData, deleteData, updateData } from "../../services/apiLibrary";
-import { PAGE_SIZE } from "../../utils/constants";
-import { prepareCategoriesTableData } from "../Table/tableUtils";
-import categoriesCols from "./categoriesCols";
+import { LoadingOutlined, SearchOutlined } from "@ant-design/icons";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Form, Input, Modal, Result, Spin, Table } from "antd";
+import { useMemo, useState } from "react";
 import { toast } from "react-hot-toast";
+import { deleteData, getAllData, updateData } from "../../services/apiLibrary";
+import { MED_PAGE_SIZE } from "../../utils/constants";
+import { CategoriesTableColumns } from "./CategoriesTableColumns";
 
 const CategoriesTable = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
   const { TextArea } = Input;
+  const [searchText, setSearchText] = useState("");
   const queryClient = useQueryClient();
 
-  const {
-    data: categories,
-    isLoading,
-    error,
-  } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryFn: () => getAllData(`/categories`),
     queryKey: ["categories"],
-    select: (data) => data.sort((a, b) => a.name.localeCompare(b.name)),
   });
 
-  const { mutate: updateCategory, isPending } = useMutation({
-    mutationFn: (category) => {
-      updateData(`/categories/${category.id}`, category);
-    },
+  const { mutate: updateCategory, isPendingUpdate } = useMutation({
+    mutationFn: (category) =>
+      updateData(`/categories/${category.id}`, category),
+
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [`categories`],
@@ -41,7 +36,7 @@ const CategoriesTable = () => {
     },
   });
 
-  const { mutate: deleteCategory } = useMutation({
+  const { mutate: deleteCategory, isPendingDelete } = useMutation({
     mutationFn: (id) => deleteData(`/categories/${id}`),
 
     onSuccess: () => {
@@ -69,6 +64,13 @@ const CategoriesTable = () => {
   const handleCancel = () => {
     setIsModalVisible(false);
   };
+
+  const filteredData = useMemo(() => {
+    if (!data) return [];
+    return data.filter((item) =>
+      item.name.toLowerCase().includes(searchText.toLowerCase())
+    );
+  }, [data, searchText]);
 
   if (isLoading) {
     return (
@@ -99,40 +101,38 @@ const CategoriesTable = () => {
     deleteCategory(id);
   };
 
-  const columns = categoriesCols(handleEdit, handleDelete);
-  const emptyRowsCount = Math.max(
-    0,
-    PAGE_SIZE - (categories?.length % PAGE_SIZE)
-  );
+  const columns = CategoriesTableColumns({
+    handleDelete,
+    handleEdit,
+    isLoading: isPendingDelete || isPendingUpdate,
+  });
 
-  const dataWithEmptyRows = prepareCategoriesTableData(
-    categories,
-    emptyRowsCount
-  );
   return (
     <>
+      <div className="mb-4 flex items-center">
+        <Input
+          placeholder="Search by name"
+          prefix={<SearchOutlined className="text-gray-400" />}
+          onChange={(e) => setSearchText(e.target.value)}
+          className="w-full max-w-md mr-4"
+        />
+      </div>
       <Table
-        className="shadow-lg rounded-lg"
         columns={columns}
-        dataSource={
-          categories?.length === 0
-            ? []
-            : categories?.length % PAGE_SIZE === 0
-            ? categories
-            : dataWithEmptyRows
-        }
+        dataSource={filteredData}
         rowKey="id"
         pagination={{
-          pageSize: PAGE_SIZE,
+          pageSize: MED_PAGE_SIZE,
         }}
-        bordered
-        borderColor="#ffff00"
+        className="shadow-sm"
       />
+
       <Modal
         title="Update Category"
         open={isModalVisible}
         onOk={onSubmit}
         onCancel={handleCancel}
+        loading={isPendingUpdate}
       >
         <Form layout="vertical" form={form}>
           <Form.Item name="name" label="Name" rules={[{ required: true }]}>
@@ -147,7 +147,7 @@ const CategoriesTable = () => {
               placeholder="Tell somethings about this category"
               showCount
               maxLength={400}
-              disabled={isPending}
+              disabled={isPendingUpdate}
               rows={5}
             />
           </Form.Item>
