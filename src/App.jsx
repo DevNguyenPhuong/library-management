@@ -41,7 +41,7 @@ const andConfig = {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={false} />
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       <ConfigProvider theme={andConfig}>
         <BrowserRouter>
           <Routes>

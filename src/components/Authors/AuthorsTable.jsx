@@ -125,7 +125,7 @@ const AuthorsTable = () => {
         className="shadow-sm"
       />
       <Modal
-        title="Add New Author"
+        title="Update Author"
         open={isModalVisible}
         onOk={onSubmit}
         onCancel={handleCancel}

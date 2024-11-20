@@ -24,6 +24,7 @@ function UsersList() {
       queryClient.invalidateQueries({
         queryKey: [`users`],
       });
+      toast.success("users deleted");
     },
 
     onError: (error) => {
