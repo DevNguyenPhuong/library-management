@@ -1,4 +1,3 @@
-import { isAction } from "@reduxjs/toolkit";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -24,9 +23,6 @@ function ProtectedRoute({ children, requiredRoles }) {
       ? rolesFromStore
       : JSON.parse(localStorage.getItem("roles")) || [];
   });
-
-  console.log(roles);
-  console.log(authenticated);
 
   useEffect(() => {
     if (!authenticated) {

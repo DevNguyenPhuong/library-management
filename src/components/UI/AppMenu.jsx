@@ -46,6 +46,12 @@ const menuItems = {
       icon: <HiOutlineOfficeBuilding />,
       index: 7,
     },
+    {
+      label: "My-info",
+      key: "/my-info",
+      icon: <HiOutlineUser />,
+      index: 8,
+    },
   ],
 
   ADMIN: [
@@ -61,6 +67,12 @@ const menuItems = {
       icon: <HiOutlineUserGroup />,
       index: 2,
     },
+    {
+      label: "My-info",
+      key: "/my-info",
+      icon: <HiOutlineUser />,
+      index: 8,
+    },
   ],
 };
 
@@ -68,7 +80,6 @@ export function SiderMenu({ roles }) {
   const navigate = useNavigate();
   const [selectedKey, setSelectedKey] = useState("/dashboard");
   const location = useLocation();
-  console.log(roles);
 
   useEffect(() => {
     setSelectedKey(location.pathname);
@@ -76,18 +87,28 @@ export function SiderMenu({ roles }) {
 
   function combineRole(roles) {
     const userRoleNames = roles.map((role) => role.name);
-    const combinedMenuItems = [];
+    const uniqueMenuItems = new Map(); // Use Map to track unique items by key
 
     userRoleNames.forEach((roleName) => {
       if (menuItems[roleName]) {
-        combinedMenuItems.push(...menuItems[roleName]);
+        menuItems[roleName].forEach((menuItem) => {
+          // Only add the item if it doesn't exist or has a lower index
+          if (
+            !uniqueMenuItems.has(menuItem.key) ||
+            uniqueMenuItems.get(menuItem.key).index > menuItem.index
+          ) {
+            uniqueMenuItems.set(menuItem.key, menuItem);
+          }
+        });
       }
     });
 
-    combinedMenuItems.sort((a, b) => a.index - b.index);
-
-    return combinedMenuItems;
+    // Convert Map values to array and sort by index
+    return Array.from(uniqueMenuItems.values()).sort(
+      (a, b) => a.index - b.index
+    );
   }
+
   return (
     <Menu
       className="font-bold"
@@ -135,7 +156,7 @@ export function HeaderMenu() {
           label: (
             <div className="flex justify-center items-center gap-3">
               <Avatar className="bg-zinc-300" size={32} icon={<FaUser />} />
-              <span>{name===''? 'anonymous': name}</span>
+              <span>{name === "" ? "anonymous" : name}</span>
             </div>
           ),
           key: "avatar",

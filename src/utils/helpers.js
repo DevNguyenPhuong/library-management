@@ -55,3 +55,8 @@ export const getBase64 = (file) =>
     reader.onload = () => resolve(reader.result);
     reader.onerror = (error) => reject(error);
   });
+
+export const getImageName = (url) => {
+  if (!url?.includes("/books/")) return "";
+  return url.split("/books/")[1];
+};

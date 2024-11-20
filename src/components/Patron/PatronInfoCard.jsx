@@ -15,6 +15,7 @@ import {
   Descriptions,
   Form,
   Input,
+  InputNumber,
   Modal,
   Result,
   Select,
@@ -112,6 +113,9 @@ const PatronInfoCard = ({ calculateAge }) => {
             <Title level={2} className="!text-white mt-4">
               {data.name}
             </Title>
+            <Title level={4} className="!text-white mt-4">
+              {data.email}
+            </Title>
           </div>
         }
         actions={[
@@ -143,6 +147,7 @@ const PatronInfoCard = ({ calculateAge }) => {
           >
             {data.id}
           </Descriptions.Item>
+
           <Descriptions.Item
             label={
               <>
@@ -194,6 +199,7 @@ const PatronInfoCard = ({ calculateAge }) => {
       </Card>
 
       <Modal
+        centered
         title="Edit Patron Information"
         open={isModalVisible}
         onOk={onSubmit}
@@ -235,6 +241,18 @@ const PatronInfoCard = ({ calculateAge }) => {
           </Form.Item>
           <Form.Item name="phone" label="Phone" rules={[{ required: true }]}>
             <Input
+              className="border border-gray-300 rounded-md"
+              disabled={isPending}
+            />
+          </Form.Item>
+          <Form.Item
+            name="deposit"
+            label="Deposit"
+            rules={[{ required: true }]}
+          >
+            <InputNumber
+              min={0}
+              max={650000}
               className="border border-gray-300 rounded-md"
               disabled={isPending}
             />

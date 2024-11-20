@@ -54,17 +54,9 @@ const AddPatron = () => {
             Create Patron Information
           </h2>
         </div>
-        <Form
-          size="large"
-          layout="horizontal"
-          style={{
-            maxWidth: 1000,
-          }}
-          onFinish={onSubmit}
-          className="mt-10"
-        >
+        <Form layout="vertical" onFinish={onSubmit} className="mt-10">
           <Row gutter={24}>
-            <Col xs={24} md={12}>
+            <Col xs={24} md={8}>
               <Form.Item
                 label="ID"
                 name="id"
@@ -78,7 +70,7 @@ const AddPatron = () => {
                 <Input placeholder="Id of patron" disabled={isPending} />
               </Form.Item>
             </Col>
-            <Col xs={24} md={12}>
+            <Col xs={24} md={8}>
               <Form.Item
                 label="Name"
                 name="name"
@@ -90,6 +82,22 @@ const AddPatron = () => {
                 ]}
               >
                 <Input placeholder="Name of patron" />
+              </Form.Item>
+            </Col>
+
+            <Col xs={24} md={8}>
+              <Form.Item
+                label="Email"
+                name="email"
+                rules={[
+                  {
+                    required: true,
+                    type: "email",
+                    message: "Please input email!",
+                  },
+                ]}
+              >
+                <Input placeholder="example@example.com" />
               </Form.Item>
             </Col>
           </Row>

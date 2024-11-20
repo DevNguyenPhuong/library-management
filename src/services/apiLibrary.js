@@ -8,18 +8,10 @@ export async function getAllData(url) {
 }
 
 export async function createData(url, data, type) {
-  if (type === "IMAGE") {
-    await axios.post(url, data, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-    return;
-  }
   await axios.post(url, data);
 }
 
-export async function updateData(url, updatedSample) {
+export async function updateData(url, updatedSample, type) {
   await axios.put(url, updatedSample);
 }
 

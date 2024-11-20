@@ -1,27 +1,51 @@
-import { BookOutlined } from "@ant-design/icons";
+import { BookOutlined, PlusOutlined } from "@ant-design/icons";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Button,
   Card,
   Col,
   Form,
+  Image,
   Input,
   InputNumber,
   Result,
   Row,
   Select,
   Spin,
+  Upload,
 } from "antd";
-import React from "react";
+import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { HiArrowLeft } from "react-icons/hi";
 import { useNavigate, useParams } from "react-router-dom";
 import { getAllData, updateData } from "../../services/apiLibrary";
+import { getBase64, getImageName } from "../../utils/helpers";
 
 export default function UpdateBook() {
   const { bookId } = useParams();
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [fileList, setFileList] = useState([]);
+  const [isDeleteImg, setIsDeleteImg] = useState(false);
+
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewOpen(true);
+  };
+
+  const handleChange = ({ fileList: newFileList }) => {
+    console.log(newFileList);
+    const lastFile = newFileList.slice(-1); // Keep only the last filec
+    console.log(newFileList?.length);
+    if (newFileList?.length) setIsDeleteImg(false);
+    setFileList(lastFile);
+  };
+
   const navigate = useNavigate();
 
   const {
@@ -61,7 +85,7 @@ export default function UpdateBook() {
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: (book) => updateData(`/books/${bookId}`, book),
+    mutationFn: ({ formData }) => updateData(`/books/${bookId}`, formData),
 
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -114,8 +138,45 @@ export default function UpdateBook() {
   }
 
   const onFinish = (values) => {
-    mutate(values);
+    const formData = new FormData();
+    const imageFile = fileList[0]?.originFileObj;
+
+    console.log({
+      ...values,
+      isDeleteImg,
+    });
+    formData.append(
+      "book",
+      new Blob(
+        [
+          JSON.stringify({
+            ...values,
+            isDeleteImg,
+          }),
+        ],
+        { type: "application/json" }
+      )
+    );
+
+    // Append image if exists
+    if (imageFile) {
+      formData.append("image", imageFile);
+    }
+
+    // For debugging - log FormData contents
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}:`, value);
+    }
+
+    mutate({ formData });
   };
+
+  const handleRemove = () => {
+    console.log("Remove triggered");
+    setIsDeleteImg(true);
+  };
+
+  console.log(isDeleteImg);
 
   return (
     <div className="max-w-6xl mx-auto p-6 ">
@@ -307,6 +368,56 @@ export default function UpdateBook() {
                     </Select.Option>
                   ))}
                 </Select>
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Row gutter={24}>
+            <Col xs={24} md={8}>
+              <Form.Item name="image" label="Book Image">
+                <Upload
+                  disabled={isPending}
+                  listType="picture-card"
+                  // fileList={fileList}
+                  defaultFileList={
+                    getImageName(book?.imageUrl) !== ""
+                      ? [
+                          {
+                            uid: "-1",
+                            name: book?.imageUrl,
+                            status: "done",
+                            url: book?.imageUrl,
+                            thumbUrl: book?.imageUrl,
+                          },
+                        ]
+                      : []
+                  }
+                  onPreview={handlePreview}
+                  onChange={handleChange}
+                  beforeUpload={() => false}
+                  maxCount={1}
+                  onRemove={handleRemove}
+                >
+                  {book?.imageUrl && ( // Only show upload button when no files
+                    <button className="bg-none border-0" type="button">
+                      <PlusOutlined />
+                      <div className="mt-2">Upload</div>
+                    </button>
+                  )}
+                </Upload>
+
+                {previewImage && (
+                  <Image
+                    className="hidden"
+                    preview={{
+                      visible: previewOpen,
+                      onVisibleChange: (visible) => setPreviewOpen(visible),
+                      afterOpenChange: (visible) =>
+                        !visible && setPreviewImage(""),
+                    }}
+                    src={previewImage}
+                  />
+                )}
               </Form.Item>
             </Col>
           </Row>

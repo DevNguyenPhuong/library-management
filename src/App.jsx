@@ -20,6 +20,7 @@ import PatronPage from "./pages/PatronPage.jsx";
 import PatronsPage from "./pages/PatronsPage.jsx";
 import PublishersPage from "./pages/PublishersPage.jsx";
 import UsersPage from "./pages/UsersPage.jsx";
+import MyInfoPage from "./pages/MyInfoPage.jsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -65,6 +66,10 @@ function App() {
               <Route path="authors" element={<AuthorsPage />} />
               <Route path="categories" element={<CategoriesPage />} />
               <Route path="publishers" element={<PublishersPage />} />
+            </Route>
+
+            <Route path="/" element={<AppLayout />}>
+              <Route path="my-info" element={<MyInfoPage />} />
             </Route>
 
             <Route

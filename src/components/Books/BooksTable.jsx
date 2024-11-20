@@ -6,6 +6,8 @@ import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import bookImgPlaceHolder from "../../assets/book.png";
+import { getImageName } from "../../utils/helpers";
 
 export default function BooksTable() {
   const navigate = useNavigate();
@@ -53,7 +55,9 @@ export default function BooksTable() {
           {column.accessor === "image" && (
             <img
               src={
-                "https://cdn0.fahasa.com/media/flashmagazine/images/page_images/451_do_f/2021_05_11_16_51_55_1-390x510.jpg"
+                getImageName(book?.imageUrl) !== ""
+                  ? book?.imageUrl
+                  : bookImgPlaceHolder
               }
               alt={book.title}
               className="w-12 h-16 object-cover"

@@ -70,7 +70,7 @@ export default function AddBook() {
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: ({ data, type }) => createData(`/books`, data, type),
+    mutationFn: ({ formData }) => createData("/books", formData),
 
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -78,6 +78,7 @@ export default function AddBook() {
       });
       toast.success("Add Success");
       form.resetFields();
+      setFileList([]);
       navigate("/librarian/books");
     },
     onError: (error) => {
@@ -119,22 +120,28 @@ export default function AddBook() {
   }
 
   const onFinish = (values) => {
+    const formData = new FormData();
     const imageFile = fileList[0]?.originFileObj;
+
+    // Convert book data to JSON string and append as 'book' part
+
+    formData.append(
+      "book",
+      new Blob([JSON.stringify(values)], { type: "application/json" })
+    );
+
+    // Append image if exists
     if (imageFile) {
-      // If there's an image, create FormData
-      const formData = new FormData();
       formData.append("image", imageFile);
-
-      for (let [key, value] of formData.entries()) {
-        console.log(`${key}:`, value);
-      }
-
-      mutate({ data: values, image: formData, type: "IMAGE" });
-    } else {
-      mutate({ data: values });
     }
-  };
 
+    // For debugging - log FormData contents
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}:`, value);
+    }
+
+    mutate({ formData });
+  };
   return (
     <div className="max-w-6xl mx-auto p-6 ">
       <Card className="shadow-lg rounded-lg overflow-hidden">
@@ -327,6 +334,7 @@ export default function AddBook() {
             <Col xs={24} md={8}>
               <Form.Item name="image" label="Book Image">
                 <Upload
+                  disabled={isPending}
                   listType="picture-card"
                   fileList={fileList}
                   onPreview={handlePreview}
