@@ -11,6 +11,8 @@ const initialState = {
   gender: "",
   roles: [],
   expiresIn: null,
+  cartItems: null,
+  shoppingSessionId: "",
 };
 
 const userSlice = createSlice({
@@ -28,9 +30,15 @@ const userSlice = createSlice({
         ...initialState,
       };
     },
+    setCartItems(state, action) {
+      return {
+        ...state,
+        ...action.payload,
+      };
+    },
   },
 });
 
-export const { setUser, clearData } = userSlice.actions;
+export const { setUser, clearData, setCartItems } = userSlice.actions;
 
 export default userSlice.reducer;

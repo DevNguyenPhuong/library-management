@@ -1,6 +1,6 @@
-import { Avatar, Menu } from "antd";
+import { Avatar, Badge, Menu } from "antd";
 import React, { useEffect, useState } from "react";
-import { FaSignOutAlt, FaUser } from "react-icons/fa";
+import { FaCartPlus, FaSignOutAlt, FaUser } from "react-icons/fa";
 import {
   HiOutlineBookOpen,
   HiOutlineHome,
@@ -10,9 +10,12 @@ import {
   HiOutlineUserGroup,
   HiOutlineUsers,
 } from "react-icons/hi";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useLogout } from "../../hooks/Authentication/useLogout";
-import { useSelector } from "react-redux";
+import { useQuery } from "@tanstack/react-query";
+import { getAllData } from "../../services/apiLibrary";
+import { setCartItems } from "../../store/userSlice";
 
 const menuItems = {
   LIBRARIAN: [
@@ -48,7 +51,7 @@ const menuItems = {
     },
     {
       label: "My-info",
-      key: "/my-info",
+      key: "/librarian/my-info",
       icon: <HiOutlineUser />,
       index: 8,
     },
@@ -68,10 +71,31 @@ const menuItems = {
       index: 2,
     },
     {
+      label: "Librarians",
+      key: "/admin/librarians",
+      icon: <HiOutlineUserGroup />,
+      index: 2,
+    },
+    {
       label: "My-info",
       key: "/my-info",
       icon: <HiOutlineUser />,
       index: 8,
+    },
+  ],
+
+  PATRON: [
+    {
+      label: "My-info",
+      key: "/patron/my-info",
+      icon: <HiOutlineUser />,
+      index: 8,
+    },
+    {
+      label: "Books",
+      key: "/patron/books",
+      icon: <HiOutlineBookOpen />,
+      index: 4,
     },
   ],
 };
@@ -123,7 +147,32 @@ export function SiderMenu({ roles }) {
   );
 }
 
-export function HeaderMenu() {
+export function HeaderMenu({ patronId, roles }) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const isPatron = roles?.some((role) => role.name === "PATRON");
+
+  const {
+    data: shoppingSession,
+    isLoading: isLoadingCart,
+    isSuccess,
+  } = useQuery({
+    queryFn: () => getAllData(`/patrons/${patronId}/shopping-session`),
+    queryKey: ["shopping-session"],
+    enabled: isPatron, // This will prevent the query from running if isPatron is false
+  });
+
+  useEffect(() => {
+    if (isSuccess) {
+      dispatch(
+        setCartItems({
+          cartItems: shoppingSession?.cartItems,
+          shoppingSessionId: shoppingSession?.id,
+        })
+      );
+    }
+  }, [isSuccess, shoppingSession, dispatch]);
+
   const { logout } = useLogout();
   const jwt = useSelector((store) => {
     const storeJwt = store.user.token;
@@ -133,20 +182,28 @@ export function HeaderMenu() {
       : localStorage.getItem("token");
   });
 
-  const name = useSelector((store) => {
-    const storeName = store.user.name;
+  const username = useSelector((store) => {
+    const storeName = store.user.username;
 
     return storeName && storeName !== ""
       ? storeName
-      : localStorage.getItem("name");
+      : localStorage.getItem("username");
   });
 
   return (
     <Menu
+      selectedKeys={[""]}
       theme={"dark"}
-      className="flex-1 min-w-0 bg-transparent w-full  justify-end"
+      className="flex-1  min-w-0 bg-transparent w-full  justify-end"
       mode="horizontal"
       onClick={({ key }) => {
+        if (key === "avatar") {
+          return;
+        }
+        if (key === "/shopping-session") {
+          if (isLoadingCart) return;
+          navigate("/patron/shopping-session");
+        }
         if (key === "/logout") {
           logout(jwt);
         }
@@ -156,10 +213,25 @@ export function HeaderMenu() {
           label: (
             <div className="flex justify-center items-center gap-3">
               <Avatar className="bg-zinc-300" size={32} icon={<FaUser />} />
-              <span>{name === "" ? "anonymous" : name}</span>
+              <span>{username === "" ? "anonymous" : username}</span>
             </div>
           ),
           key: "avatar",
+        },
+        isPatron && {
+          key: "/shopping-session",
+          icon: (
+            <Badge
+              className="border-none"
+              overflowCount={9}
+              count={shoppingSession?.cartItems?.length}
+              size="small"
+            >
+              <div className="w-full h-full">
+                <FaCartPlus className="size-6" />
+              </div>
+            </Badge>
+          ),
         },
         {
           label: "Log out",

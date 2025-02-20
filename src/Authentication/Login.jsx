@@ -1,6 +1,7 @@
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Form, Input, Typography } from "antd";
 import React from "react";
+import { Link } from "react-router-dom";
 import libraryBackground from "../assets/bg-img.jpg"; // Adjust the path as necessary
 import { useLogin } from "../hooks/Authentication/useLogin";
 
@@ -29,6 +30,7 @@ function Login() {
           layout="vertical"
           onFinish={onFinish}
           className="p-8 rounded-xl shadow-2xl bg-white bg-opacity-90 backdrop-blur-sm"
+          initialValues={{ role: "PATRON" }}
         >
           <Title level={2} className="text-center mb-2 text-primary">
             Welcome Back
@@ -88,6 +90,13 @@ function Login() {
               </Button>
             </div>
           </Form.Item>
+
+          <p className="flex justify-center mb-2">
+            Not registed?
+            <Link className="pl-2 text-indigo-400" to={"/signup"}>
+              Create an account
+            </Link>
+          </p>
         </Form>
       </div>
     </div>

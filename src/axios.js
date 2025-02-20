@@ -6,7 +6,12 @@ const api = axios.create({
 });
 
 //  "/auth/logout",
-const publicRoutes = ["/auth/token", "/auth/introspect", "/auth/refresh"];
+const publicRoutes = [
+  "/auth/token",
+  "/auth/introspect",
+  "/auth/refresh",
+  "/patrons/register",
+];
 
 api.interceptors.request.use(
   (config) => {

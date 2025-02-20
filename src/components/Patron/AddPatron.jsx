@@ -1,6 +1,16 @@
 import { BookOutlined } from "@ant-design/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Button, Card, Col, DatePicker, Form, Input, Row, Select } from "antd";
+import {
+  Button,
+  Card,
+  Checkbox,
+  Col,
+  DatePicker,
+  Form,
+  Input,
+  Row,
+  Select,
+} from "antd";
 import { format } from "date-fns";
 import React from "react";
 import { toast } from "react-hot-toast";
@@ -34,6 +44,7 @@ const AddPatron = () => {
       status: "ACTIVE",
       dob: format(values.dob.$d, "yyyy-MM-dd"),
       membershipDate: format(values.membershipDate.$d, "yyyy-MM-dd"),
+      depositPaid: values?.depositPaid === "YES" ? true : false,
     });
   };
 
@@ -54,7 +65,12 @@ const AddPatron = () => {
             Create Patron Information
           </h2>
         </div>
-        <Form layout="vertical" onFinish={onSubmit} className="mt-10">
+        <Form
+          layout="vertical"
+          onFinish={onSubmit}
+          className="mt-10"
+          initialValues={{ depositPaid: "NO" }}
+        >
           <Row gutter={24}>
             <Col xs={24} md={8}>
               <Form.Item
@@ -110,7 +126,7 @@ const AddPatron = () => {
                 rules={[
                   {
                     required: true,
-                    message: "Please input name!",
+                    message: "Please select gender!",
                   },
                 ]}
               >
@@ -152,7 +168,7 @@ const AddPatron = () => {
                 <DatePicker className="w-full" disabled={isPending} />
               </Form.Item>
             </Col>
-            <Col xs={24} md={12}>
+            <Col xs={12} md={6}>
               <Form.Item
                 label="Membership Day"
                 name="membershipDate"
@@ -164,6 +180,24 @@ const AddPatron = () => {
                 ]}
               >
                 <DatePicker className="w-full" disabled={isPending} />
+              </Form.Item>
+            </Col>
+
+            <Col xs={12} md={6}>
+              <Form.Item
+                label="Deposit paid"
+                name="depositPaid"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select this field!",
+                  },
+                ]}
+              >
+                <Select placeholder="Deposit paid">
+                  <Select.Option value="YES">Yes</Select.Option>
+                  <Select.Option value="NO">No</Select.Option>
+                </Select>
               </Form.Item>
             </Col>
           </Row>

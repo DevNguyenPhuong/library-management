@@ -15,27 +15,13 @@ export function useLogin() {
   } = useMutation({
     mutationFn: (user) => loginAPI(user),
     onSuccess: (response) => {
-      const {
-        token,
-        authenticated,
-        id,
-        username,
-        name,
-        phone,
-        dob,
-        gender,
-        roles,
-        expiresIn,
-      } = response?.result;
+      const { token, authenticated, id, username, roles, expiresIn } =
+        response?.result;
 
       localStorage.setItem("token", token);
       localStorage.setItem("authenticated", String(authenticated));
       localStorage.setItem("id", id);
       localStorage.setItem("username", username || "");
-      localStorage.setItem("name", name || "");
-      localStorage.setItem("phone", phone || "");
-      localStorage.setItem("dob", dob?.toString() || "");
-      localStorage.setItem("gender", gender || "");
       localStorage.setItem("roles", JSON.stringify(roles));
       localStorage.setItem("expiresIn", String(expiresIn));
 
@@ -45,10 +31,6 @@ export function useLogin() {
           authenticated,
           id,
           username,
-          name,
-          phone,
-          dob,
-          gender,
           roles,
           expiresIn,
         })

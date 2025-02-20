@@ -58,5 +58,6 @@ export const getBase64 = (file) =>
 
 export const getImageName = (url) => {
   if (!url?.includes("/books/")) return "";
+  if (url?.includes("null")) return "";
   return url.split("/books/")[1];
 };

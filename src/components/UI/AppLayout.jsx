@@ -12,6 +12,8 @@ function AppLayout() {
       ? rolesFromStore
       : JSON.parse(localStorage.getItem("roles")) || [];
   });
+  const { id: patronId } = useSelector((store) => store.user);
+  const patronIdFromLocalStorage = localStorage.getItem("id");
 
   const [collapsed, setCollapsed] = useState(false);
   const layoutConfig = {
@@ -34,7 +36,10 @@ function AppLayout() {
 
       <Layout className={`${layoutConfig[collapsed]}`}>
         <Header className="fixed w-full top-0 left-0 z-10 flex items-center font-bold ">
-          <HeaderMenu />
+          <HeaderMenu
+            patronId={patronId !== "" ? patronId : patronIdFromLocalStorage}
+            roles={roles}
+          />
         </Header>
 
         <Content className="m-6 mt-20 lg:mt-16 mx-4 ">

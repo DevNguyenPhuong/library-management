@@ -1,5 +1,4 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ConfigProvider } from "antd";
 import { Toaster } from "react-hot-toast";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
@@ -15,12 +14,20 @@ import BooksPage from "./pages/BooksPage.jsx";
 import CategoriesPage from "./pages/CategoriesPage.jsx";
 import DashboardPage from "./pages/DashboardPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
+import MyInfoPage from "./pages/MyInfoPage.jsx";
 import PageNotFound from "./pages/PageNotFound";
 import PatronPage from "./pages/PatronPage.jsx";
 import PatronsPage from "./pages/PatronsPage.jsx";
 import PublishersPage from "./pages/PublishersPage.jsx";
+import SignupPage from "./pages/SignupPage.jsx";
 import UsersPage from "./pages/UsersPage.jsx";
-import MyInfoPage from "./pages/MyInfoPage.jsx";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import PatronBookPage from "./pages/PatronBookPage.jsx";
+import PatronPersonalInfoPage from "./pages/PatronPersonalInfoPage.jsx";
+import LibrarianPage from "./pages/LibrarianPage.jsx";
+import LibrarianPersonalInfoPage from "./pages/LibrarianPersonalInfoPage.jsx";
+import PatronBookDetailsPage from "./pages/PatronBookDetailsPage.jsx";
+import ShoppingSessionPage from "./pages/ShoppingSessionPage.jsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -41,7 +48,7 @@ const andConfig = {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+      <ReactQueryDevtools initialIsOpen={false} />
       <ConfigProvider theme={andConfig}>
         <BrowserRouter>
           <Routes>
@@ -62,7 +69,7 @@ function App() {
               <Route path="books" element={<BooksPage />} />
               <Route path="addBook" element={<AddBook />} />
               <Route path="books/:bookId" element={<BookPage />} />
-
+              <Route path="my-info" element={<LibrarianPersonalInfoPage />} />
               <Route path="authors" element={<AuthorsPage />} />
               <Route path="categories" element={<CategoriesPage />} />
               <Route path="publishers" element={<PublishersPage />} />
@@ -83,12 +90,32 @@ function App() {
               <Route index element={<Navigate replace to="dashboard" />} />
               <Route path="dashboard" element={<DashboardPage />} />
               <Route path="users" element={<UsersPage />} />
+              <Route path="librarians" element={<LibrarianPage />} />
               <Route path="users/:userId" element={<EditUser />} />
               <Route path="addUser" element={<AddUser />} />
             </Route>
 
+            <Route
+              path="patron"
+              element={
+                <ProtectedRoute requiredRoles={"PATRON"}>
+                  <AppLayout />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<Navigate replace to="books" />} />
+              <Route path="books" element={<PatronBookPage />} />
+              <Route path="books/:bookId" element={<PatronBookDetailsPage />} />
+              <Route
+                path="shopping-session"
+                element={<ShoppingSessionPage />}
+              />
+              <Route path="my-info" element={<PatronPersonalInfoPage />} />
+            </Route>
+
             <Route index element={<Navigate replace to="login" />} />
             <Route path="login" element={<LoginPage />} />
+            <Route path="signup" element={<SignupPage />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </BrowserRouter>
