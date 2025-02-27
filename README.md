@@ -14,7 +14,15 @@
 1. 🤖 [Introduction](#introduction)
 2. ⚙️ [Tech Stack](#tech-stack)
 
-## 🚨 Tutorial
+## 🚨 Features
+
+- Manage patrons, librarian
+- Manage books, book copy based on occurrence abstraction pattern
+- Manage loans, fines for patrons
+- Auto sending mail to patrons
+- Statistics for admin
+- Manage authors, categories and publishers
+- Manage personal account information
 
 ## <a name="introduction">🤖 Introduction</a>
 
